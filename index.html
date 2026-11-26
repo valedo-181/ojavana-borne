@@ -1,0 +1,736 @@
+<title>O'javana Borne 12:00</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one lunch peak, 12:00 → 13:00. Night (problem) sections give way to daylight (solution) sections; a scroll-driven clock is the thread. */
+:root{
+  color-scheme: dark;
+  --night:#0c1112;        /* rush, before the kiosk */
+  --night-2:#151c1d;
+  --ink-on-night:#eef2f1;
+  --mute-on-night:#9aa7a6;
+  --amber:#f2a541;        /* neon heat of the counter */
+  --day:#f6f7f5;          /* after the kiosk */
+  --day-2:#e9ecea;
+  --ink:#0f1a1a;
+  --mute:#4f5f5e;
+  --teal:#1e5b5a;         /* O'javana logo teal (approx. — to confirm) */
+  --teal-hi:#2f8582;
+  --line-day:#d5dbd8;
+  --line-night:#263132;
+  --ok:#2f8a5b;
+  --err:#b3402f;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter-l:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+  --wrap:1180px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--night);color:var(--ink-on-night);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--night)}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-stretch:85%;line-height:1.02;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.6rem,7.2vw,6rem);font-weight:850}
+h2{font-size:clamp(2rem,4.6vw,3.6rem);font-weight:800}
+h3{font-size:1.3rem;font-weight:700;font-stretch:95%;line-height:1.2}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.time{font-family:var(--f-mono);font-weight:700;font-size:.85rem;letter-spacing:.12em;color:var(--amber)}
+.day .time{color:var(--teal)}
+.lead{font-size:1.2rem;max-width:62ch}
+:focus-visible{outline:3px solid var(--teal-hi);outline-offset:3px;border-radius:4px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:.6em;font:600 1rem/1 var(--f-body);padding:1.05em 1.5em;border-radius:999px;border:0;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+.btn-primary{background:var(--teal);color:#fff}
+.btn-primary:hover{background:var(--teal-hi);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn-ghost:hover{transform:translateY(-1px)}
+.play{width:0;height:0;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(12,17,18,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line-night);transition:background .4s,color .4s,border-color .4s}
+.top.is-day{background:rgba(246,247,245,.88);color:var(--ink);border-color:var(--line-day)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.logo{font-family:var(--f-display);font-weight:800;font-size:1.45rem;letter-spacing:-.02em;text-decoration:none;display:flex;align-items:center;gap:.45em}
+.logo-mark{width:30px;height:30px;border-radius:50%;background:var(--teal);display:grid;place-items:center;color:#dff3ef;font-size:1rem;font-weight:800}
+.clock{font-family:var(--f-mono);font-weight:700;font-size:.95rem;font-variant-numeric:tabular-nums;color:var(--amber);padding:.35em .7em;border-radius:6px;background:rgba(242,165,65,.1);transition:color .4s,background .4s}
+.top.is-day .clock{color:var(--teal);background:rgba(30,91,90,.1)}
+.top .btn{padding:.8em 1.2em;font-size:.92rem}
+.head-r{display:flex;align-items:center;gap:12px}
+
+/* Hero */
+.hero{position:relative;min-height:min(92vh,820px);display:flex;align-items:flex-end;overflow:hidden;isolation:isolate}
+.hero-media{position:absolute;inset:0;z-index:-2}
+.hero-media img,.hero-media video{width:100%;height:100%;object-fit:cover;filter:saturate(.8) contrast(1.05);transform:scale(1.06);animation:drift 22s ease-in-out infinite alternate}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,17,18,.35) 0%,rgba(12,17,18,.55) 45%,var(--night) 100%),radial-gradient(80% 60% at 70% 30%,rgba(242,165,65,.18),transparent 60%)}
+@keyframes drift{to{transform:scale(1.12) translate(-1.5%,-1%)}}
+.hero .wrap{width:100%;padding-block:clamp(48px,9vh,96px)}
+.hero-copy{max-width:780px;display:grid;gap:22px}
+.hero h1 .w{display:inline-block;animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero .sub{font-size:clamp(1.1rem,1.8vw,1.35rem);color:#dbe3e2;max-width:52ch}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero .note{font-size:.88rem;color:var(--mute-on-night)}
+.proto{position:absolute;top:18px;right:var(--gutter-r);font:500 .72rem/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.55);padding:.5em .8em;border-radius:4px;max-width:260px}
+@keyframes rise{from{transform:translateY(.35em);opacity:.0001}to{transform:none;opacity:1}}
+
+/* Night sections */
+.night{background:var(--night);color:var(--ink-on-night)}
+section{padding-block:clamp(72px,11vw,140px)}
+.s-head{display:grid;gap:18px;margin-bottom:48px;max-width:860px}
+.s-head p{color:var(--mute-on-night)}
+.day .s-head p{color:var(--mute)}
+.pain-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.pain{background:var(--night-2);border:1px solid var(--line-night);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pain-vid{aspect-ratio:4/3;background:repeating-linear-gradient(135deg,#182122 0 12px,#1b2526 12px 24px);display:grid;place-items:center;text-align:center;padding:16px;color:var(--mute-on-night);font:500 .75rem/1.4 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;position:relative}
+.pain-vid b{display:block;font-size:2.4rem;color:var(--amber);font-family:var(--f-display);letter-spacing:0;margin-bottom:6px}
+.pain-body{padding:22px;display:grid;gap:8px}
+.pain-body p{color:var(--mute-on-night)}
+.question{margin-top:72px;text-align:center;font-family:var(--f-display);font-weight:800;font-stretch:85%;font-size:clamp(1.9rem,4.4vw,3.4rem);line-height:1.08;text-wrap:balance;max-width:900px;margin-inline:auto}
+.question em{font-style:normal;color:var(--amber)}
+
+/* The switch: night → day */
+.switch{background:linear-gradient(180deg,var(--night) 0%,#16211f 30%,#1f3634 62%,#3f6764 84%,var(--day) 100%);padding-block:clamp(90px,12vw,160px) clamp(140px,16vw,220px)}
+.switch-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.switch h2{color:#fff}
+.switch .lead{color:#e4ebe9;margin-top:20px}
+.switch .btn{margin-top:28px}
+.switch-kiosk{position:relative;justify-self:center;max-width:380px;width:100%}
+.switch-kiosk img{border-radius:18px;box-shadow:0 40px 80px -30px rgba(0,0,0,.6)}
+.switch-kiosk::before{content:"";position:absolute;inset:8% 14% 45%;background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent);filter:blur(30px);z-index:-1}
+
+/* Day sections */
+.day{background:var(--day);color:var(--ink)}
+.day.alt{background:var(--day-2)}
+
+/* How it works: pinned kiosk */
+.how{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:start}
+.how-pin{position:sticky;top:120px}
+.screen{position:relative;max-width:400px;margin-inline:auto;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 30px 70px -35px rgba(15,26,26,.5)}
+.screen img{width:100%}
+.screen-ui{position:absolute;left:12%;right:12%;top:8%;bottom:39%;border-radius:6px;background:#fff;display:flex;flex-direction:column;padding:12px;gap:8px;font-family:var(--f-body);color:var(--ink);box-shadow:0 0 0 1px rgba(0,0,0,.06);transition:opacity .35s}
+.ui-title{font:700 .9rem/1.2 var(--f-body)}
+.ui-sub{font-size:.68rem;color:var(--mute)}
+.ui-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:1}
+.ui-tile{border-radius:6px;background:var(--day-2);display:grid;place-items:end center;padding:4px;font-size:.55rem;font-weight:600;transition:background .3s,box-shadow .3s}
+.ui-tile.on{background:#d9ecea;box-shadow:inset 0 0 0 2px var(--teal)}
+.ui-list{display:grid;gap:6px;flex:1;align-content:start}
+.ui-row{display:flex;justify-content:space-between;align-items:center;font-size:.7rem;padding:6px 8px;border-radius:6px;background:var(--day-2)}
+.ui-row s{color:var(--mute)}
+.ui-pill{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--teal);color:#fff}
+.ui-foot{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;font-weight:700;border-top:1px solid var(--line-day);padding-top:8px;font-variant-numeric:tabular-nums}
+.ui-btn{background:#d6362e;color:#fff;border-radius:5px;padding:5px 10px;font-size:.62rem}
+.ui-pay{display:grid;gap:6px;flex:1;align-content:center;justify-items:center;text-align:center}
+.ui-pay .chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.ui-pay .chip{font-size:.6rem;font-weight:700;padding:5px 8px;border-radius:5px;background:var(--day-2)}
+.ui-pay .chip.on{background:var(--ink);color:#fff}
+.ui-kds{background:#111a1a;color:#eaf1ef;border-radius:6px;padding:10px;display:grid;gap:5px;font-family:var(--f-mono);font-size:.62rem;flex:1;align-content:start}
+.ui-kds b{color:#7fd1c8}
+.steps{display:grid;gap:14px;counter-reset:st}
+.step{display:grid;grid-template-columns:auto 1fr;gap:18px;padding:26px;border-radius:14px;border:1px solid var(--line-day);background:#fff;transition:border-color .3s,box-shadow .3s,transform .3s;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.step-n{font:700 .85rem/1 var(--f-mono);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--day-2);color:var(--mute);transition:background .3s,color .3s}
+.step p{color:var(--mute);margin-top:6px}
+.step.active{border-color:var(--teal);box-shadow:0 14px 34px -22px rgba(30,91,90,.6);transform:translateX(4px)}
+.step.active .step-n{background:var(--teal);color:#fff}
+.progress{height:4px;border-radius:4px;background:var(--line-day);margin-bottom:22px;overflow:hidden;max-width:400px;margin-inline:auto}
+.progress i{display:block;height:100%;width:20%;background:var(--teal);transition:width .4s}
+
+/* Benefits */
+.benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.benefit{padding:30px;border-radius:14px;background:#fff;border:1px solid var(--line-day);display:grid;gap:12px;align-content:start}
+.benefit .who{font:700 .78rem/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.benefit p{color:var(--mute)}
+.center-cta{display:flex;justify-content:center;margin-top:48px}
+
+/* Product */
+.product{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.hotspot-wrap{position:relative;max-width:440px;margin-inline:auto;width:100%}
+.hotspot-wrap img{border-radius:18px}
+.hs{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:0;background:var(--teal);color:#fff;font:700 1rem/1 var(--f-body);cursor:pointer;box-shadow:0 0 0 6px rgba(30,91,90,.25);transition:transform .2s}
+.hs::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--teal-hi);animation:ping 2.4s ease-out infinite}
+.hs:hover,.hs[aria-expanded="true"]{transform:scale(1.15)}
+.hs[aria-expanded="true"]{background:var(--ink)}
+@keyframes ping{from{transform:scale(.8);opacity:.9}to{transform:scale(1.7);opacity:0}}
+.specs{display:grid;gap:10px;margin-top:28px}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:16px 18px;border-radius:12px;border:1px solid var(--line-day);background:#fff;transition:border-color .3s,background .3s}
+.spec.on{border-color:var(--teal);background:#eef6f5}
+.spec-k{font:700 .78rem/1.6 var(--f-mono);color:var(--teal);width:22px}
+.spec p{color:var(--mute);font-size:.95rem}
+.spec strong{display:block}
+.mount{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.tag{font:600 .85rem/1 var(--f-body);padding:.7em 1em;border-radius:99px;background:var(--day-2)}
+.pay-logos{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.pay{font:800 .85rem/1 var(--f-display);font-stretch:100%;letter-spacing:.02em;padding:.75em 1.1em;border-radius:8px;background:var(--ink);color:#fff}
+.pay.twint{background:#000}
+
+/* Results */
+.results-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.reel{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;margin-top:40px;scrollbar-width:thin}
+.client{flex:0 0 clamp(220px,26vw,300px);scroll-snap-align:start;margin:0}
+.client img{aspect-ratio:3/4;object-fit:cover;border-radius:14px;width:100%}
+.client figcaption{margin-top:12px;display:grid;gap:2px}
+.client figcaption span{font-size:.85rem;color:var(--mute)}
+.real-note{font:500 .75rem/1.4 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:8px}
+.real-note::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal)}
+
+/* Why */
+.why{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.why-item{display:grid;gap:10px;align-content:start;padding-top:22px;border-top:2px solid var(--ink)}
+.why-item p{color:var(--mute)}
+.chain{margin-top:40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:28px 32px;border-radius:14px;background:var(--ink);color:#fff}
+.chain p{color:#c8d3d1;max-width:60ch}
+.chain a{font-weight:600}
+
+/* Demo */
+.demo{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:start}
+.big-clock{font:700 clamp(3.4rem,8vw,6.5rem)/1 var(--f-mono);color:var(--teal);font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.gets{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:14px}
+.gets li{display:grid;grid-template-columns:24px 1fr;gap:12px}
+.gets li::before{content:"";width:22px;height:22px;border-radius:50%;background:var(--teal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/14px no-repeat;margin-top:2px}
+.call{margin-top:28px;padding:18px 20px;border-radius:12px;background:var(--day-2);font-size:.95rem}
+.call strong{font-variant-numeric:tabular-nums}
+form{background:#fff;border:1px solid var(--line-day);border-radius:18px;padding:clamp(22px,3.5vw,40px);display:grid;gap:18px;box-shadow:0 30px 70px -45px rgba(15,26,26,.45)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{display:grid;gap:7px;min-width:0}
+label{font-weight:600;font-size:.92rem}
+input,select{font:inherit;font-size:1rem;padding:.85em 1em;border-radius:10px;border:1.5px solid var(--line-day);background:var(--day);color:var(--ink);width:100%;transition:border-color .2s,background .2s}
+input:focus,select:focus{outline:none;border-color:var(--teal);background:#fff}
+.field.ok input,.field.ok select{border-color:var(--ok)}
+.field.bad input,.field.bad select{border-color:var(--err)}
+.msg{font-size:.82rem;color:var(--err);min-height:1.1em}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg label{font-weight:500;padding:.6em 1em;border-radius:99px;border:1.5px solid var(--line-day);cursor:pointer;background:var(--day);font-size:.92rem}
+.seg input:checked + label{background:var(--teal);border-color:var(--teal);color:#fff}
+.seg input:focus-visible + label{outline:3px solid var(--teal-hi);outline-offset:2px}
+form .btn{justify-content:center;width:100%;font-size:1.05rem}
+.reassure{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;font-size:.85rem;color:var(--mute)}
+.next{font-size:.85rem;text-align:center;color:var(--teal);font-weight:600}
+.privacy{font-size:.78rem;color:var(--mute);text-align:center}
+.done{display:grid;gap:16px;text-align:center;justify-items:center;padding:20px 0}
+.done .big{font:800 2.2rem/1.05 var(--f-display);font-stretch:85%}
+.cal{width:100%;border:1.5px dashed var(--teal);border-radius:14px;padding:22px;display:grid;gap:12px;background:#f1f7f6}
+.slots{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.slot{font:600 .9rem/1 var(--f-mono);padding:.7em 1em;border-radius:8px;border:1.5px solid var(--teal);background:#fff;color:var(--teal);cursor:pointer}
+.slot[aria-pressed="true"]{background:var(--teal);color:#fff}
+.cal small{color:var(--mute)}
+
+/* FAQ */
+.faq{max-width:860px;margin-inline:auto}
+details{border-bottom:1px solid var(--line-day)}
+summary{list-style:none;cursor:pointer;padding:24px 44px 24px 0;font:700 1.15rem/1.35 var(--f-body);position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";position:absolute;right:6px;top:50%;width:14px;height:14px;margin-top:-9px;border-right:2.5px solid var(--teal);border-bottom:2.5px solid var(--teal);transform:rotate(45deg);transition:transform .3s}
+details[open] summary::after{transform:rotate(-135deg);margin-top:-3px}
+details p{padding:0 0 24px;color:var(--mute);max-width:68ch}
+.faq-cta{display:grid;justify-items:center;gap:16px;margin-top:56px;text-align:center}
+
+/* Footer */
+footer{background:var(--ink);color:#c8d3d1;padding-block:48px calc(48px + 76px)}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:.92rem}
+footer .logo{color:#fff}
+
+/* Mobile sticky CTA */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:55;padding:12px var(--gutter-r) calc(12px + env(safe-area-inset-bottom,0px)) var(--gutter-l);background:rgba(246,247,245,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line-day);display:none;transform:translateY(110%);transition:transform .35s}
+.sticky-cta.show{transform:none}
+.sticky-cta .btn{width:100%;justify-content:center}
+
+/* Reveal: content is visible at rest; JS only adds a gentle lift when it enters */
+.lift{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.lift.pre{transform:translateY(22px)}
+
+@media (max-width:900px){
+  .pain-grid,.benefits{grid-template-columns:1fr}
+  .switch-grid,.how,.product,.demo{grid-template-columns:1fr}
+  .how-pin{position:relative;top:0}
+  .why{grid-template-columns:1fr 1fr}
+  .top .btn{display:none}
+  .sticky-cta{display:block}
+  .switch-kiosk{max-width:300px}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .why,.row2{grid-template-columns:1fr}
+  .proto{position:static;margin:12px var(--gutter-r) 0 var(--gutter-l);display:inline-block}
+  .hero{flex-direction:column;align-items:stretch;justify-content:flex-end}
+  .step{padding:20px;gap:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .lift.pre{transform:none}
+}
+
+/* Film modal */
+.film-modal{position:fixed;inset:0;z-index:100;background:rgba(6,9,10,.92);display:grid;place-items:center;padding:16px}
+.film-modal video{width:min(1100px,100%);max-height:86vh;border-radius:12px;background:#000}
+.film-modal .x{position:absolute;top:14px;right:16px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-size:1.4rem;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.hero-media video{display:none}.hero-media{background:url(img/hero-krousty.jpg) center/cover}}
+.pain-vid img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.85)}
+.pain-vid::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(12,17,18,.55))}
+.spec-k{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;font-size:.72rem;line-height:1;margin-top:1px}
+.spec-k.dot{background:transparent;border:2px solid var(--line-day);width:10px;height:10px;margin:7px 7px 0}
+
+/* Scroll-driven film */
+.story{position:relative;height:620vh;background:#000}
+.story-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:grid;place-items:center;background:#000}
+.story-pin video{width:100%;height:100%;object-fit:cover}
+.story-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,transparent 22%,transparent 80%,rgba(0,0,0,.35) 100%)}
+.story-ui{position:absolute;top:78px;left:var(--gutter-l,24px);right:var(--gutter-r,24px);display:flex;justify-content:space-between;align-items:center;gap:12px;color:#fff}
+.story-kicker{font:600 .75rem/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.story-time{font:700 1.1rem/1 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--amber);background:rgba(0,0,0,.45);padding:.4em .65em;border-radius:6px;transition:color .4s}
+.story-time.day{color:#9fe0d6}
+.story-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.15)}
+.story-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--teal))}
+.story-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:grid;justify-items:center;gap:8px;color:#fff;font:600 .78rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;transition:opacity .4s}
+.story-hint b{width:2px;height:28px;background:linear-gradient(#fff,transparent);animation:hint 1.6s ease-in-out infinite}
+@keyframes hint{0%{transform:scaleY(.3);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(.3);transform-origin:bottom}}
+.story-hint.gone{opacity:0}
+@media (max-aspect-ratio:1/1){.story-pin video{object-fit:contain;height:auto}}
+@media (prefers-reduced-motion:reduce){.story{height:auto}.story-pin{position:relative;height:auto;aspect-ratio:16/9}.story-hint,.story-bar{display:none}}
+</style>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="logo" href="#hero" aria-label="O'javana, retour en haut"><span class="logo-mark" aria-hidden="true">j</span>o'javana</a>
+    <div class="head-r">
+      <span class="clock" id="clock" aria-label="Heure du service">12:00</span>
+      <a class="btn btn-primary" href="#demo">Réserver ma démo gratuite</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. HERO -->
+  <section class="hero" id="hero" data-t="0">
+    <div class="hero-media"><video autoplay muted loop playsinline preload="auto" poster="img/hero-krousty.jpg" aria-hidden="true"><source src="video/hero.mp4" type="video/mp4"></video></div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="time">12:00</span>
+        <h1 id="h1">L'heure de pointe, sans la file.</h1>
+        <p class="sub">La borne de commande O'javana prend les commandes et les paiements pendant que votre équipe prépare et accueille.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#demo">Réserver ma démo gratuite</a>
+          <a class="btn btn-ghost" href="#film" id="film"><span class="play" aria-hidden="true"></span>Voir le film (1 min)</a>
+        </div>
+        <p class="note">Démo de 30 minutes sur votre propre carte. Sans engagement.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1b. HISTOIRE AU SCROLL -->
+  <section class="story" id="histoire" data-t="2" aria-label="Le film d'une heure de pointe, piloté par le défilement">
+    <div class="story-pin">
+      <video id="story-v" muted playsinline preload="auto" poster="img/scene-s2.jpg" aria-hidden="true"><source src="video/scrub.mp4" type="video/mp4"></video>
+      <div class="story-shade"></div>
+      <div class="story-ui">
+        <span class="story-kicker">Une heure de pointe, image par image</span>
+        <span class="story-time" id="story-time">12:00</span>
+      </div>
+      <div class="story-bar" aria-hidden="true"><i id="story-bar"></i></div>
+      <div class="story-hint" id="story-hint"><span>Faites défiler</span><b aria-hidden="true"></b></div>
+    </div>
+  </section>
+
+  <!-- 2. COÛT DES FILES -->
+  <section class="night" id="cout" data-t="15">
+    <div class="wrap">
+      <div class="s-head lift">
+        <span class="time">12:15</span>
+        <h2>Chaque midi, votre comptoir décide de votre chiffre d'affaires.</h2>
+        <p class="lead">Quand une seule personne prend les commandes, encaisse et répond au téléphone, votre restaurant ne peut pas servir plus vite qu'elle.</p>
+      </div>
+      <div class="pain-grid">
+        <article class="pain lift">
+          <div class="pain-vid"><img src="img/scene-s2.jpg" alt="Une longue file de clients impatients attend au comptoir à midi" loading="lazy"></div>
+          <div class="pain-body"><h3>La file qui fait fuir</h3><p>Ils entrent, voient la file, regardent l'heure. Et ressortent sans rien dire.</p></div>
+        </article>
+        <article class="pain lift">
+          <div class="pain-vid"><img src="img/scene-s4.jpg" alt="Un cuisinier peine à lire un ticket de commande froissé" loading="lazy"></div>
+          <div class="pain-body"><h3>L'erreur qui coûte deux fois</h3><p>Une commande mal comprise, c'est un produit refait, un client déçu et du temps perdu en plein service.</p></div>
+        </article>
+        <article class="pain lift">
+          <div class="pain-vid"><img src="img/scene-s3.jpg" alt="Une équipière débordée encaisse et imprime un ticket en plein rush" loading="lazy"></div>
+          <div class="pain-body"><h3>Le supplément oublié</h3><p>En plein rush, personne n'a le temps de proposer la boisson, le menu ou le dessert.</p></div>
+        </article>
+      </div>
+      <p class="question lift">Combien de clients sont repartis de chez vous <em>ce midi</em> ?</p>
+    </div>
+  </section>
+
+  <!-- 3. LA SOLUTION -->
+  <section class="switch" id="solution" data-t="20">
+    <div class="wrap switch-grid">
+      <div class="lift">
+        <span class="time" style="color:#bfe3de">12:20</span>
+        <h2 style="margin-top:14px">Et si votre restaurant fonctionnait autrement ?</h2>
+        <p class="lead">Avec la borne O'javana, vos clients commandent et paient eux-mêmes, en quelques gestes. La commande part directement en cuisine. Votre comptoir n'est plus le goulot d'étranglement.</p>
+        <a class="btn btn-ghost" href="#demo" style="color:#fff">Voir la borne en démo</a>
+      </div>
+      <div class="switch-kiosk lift"><img src="img/borne-seule.jpg" alt="Borne O'javana blanche sur pied, écran allumé" loading="lazy"></div>
+    </div>
+  </section>
+
+  <!-- 4. COMMENT ÇA MARCHE -->
+  <section class="day" id="comment" data-t="25">
+    <div class="wrap">
+      <div class="s-head lift">
+        <span class="time">12:25</span>
+        <h2>Cinq gestes. Zéro attente au comptoir.</h2>
+      </div>
+      <div class="how">
+        <div class="how-pin">
+          <div class="progress" aria-hidden="true"><i id="prog"></i></div>
+          <div class="screen">
+            <img src="img/interface.jpg" alt="Borne O'javana montrant la grille de produits" loading="lazy">
+            <div class="screen-ui" id="ui" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="steps" id="steps">
+          <button class="step active" data-s="0" type="button"><span class="step-n">1</span><span><h3>Ils choisissent</h3><p>Vos produits en grand, en photo, classés comme sur votre carte.</p></span></button>
+          <button class="step" data-s="1" type="button"><span class="step-n">2</span><span><h3>Ils personnalisent</h3><p>Sans oignons, sauce à part, taille XL. Ils le disent eux-mêmes, il n'y a plus rien à interpréter.</p></span></button>
+          <button class="step" data-s="2" type="button"><span class="step-n">3</span><span><h3>La borne propose</h3><p>Une boisson, des frites, un dessert. À chaque commande, sans oublier, sans insister.</p></span></button>
+          <button class="step" data-s="3" type="button"><span class="step-n">4</span><span><h3>Ils paient</h3><p>TWINT, Apple Pay, Google Pay ou carte, directement sur la borne.</p></span></button>
+          <button class="step" data-s="4" type="button"><span class="step-n">5</span><span><h3>Votre cuisine reçoit</h3><p>La commande arrive en cuisine, exactement comme le client l'a voulue.</p></span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. AVANTAGES -->
+  <section class="day alt" id="avantages" data-t="30">
+    <div class="wrap">
+      <div class="s-head lift">
+        <span class="time">12:30</span>
+        <h2>Votre équipe ne court plus après la caisse.</h2>
+      </div>
+      <div class="benefits">
+        <article class="benefit lift"><span class="who">Pour vous</span><h3>Un service que vous maîtrisez</h3><p>Plus de commandes prises pendant l'heure de pointe, un supplément proposé à chaque client, un service que vous maîtrisez à nouveau.</p></article>
+        <article class="benefit lift"><span class="who">Pour votre équipe</span><h3>Moins de pression au comptoir</h3><p>Plus de temps pour préparer, servir et accueillir.</p></article>
+        <article class="benefit lift"><span class="who">Pour vos clients</span><h3>Commander à leur rythme</h3><p>Ils commandent à leur rythme, dans leur langue, sans faire la queue pour passer commande.</p></article>
+      </div>
+      <div class="center-cta"><a class="btn btn-primary" href="#demo">Réserver ma démo gratuite</a></div>
+    </div>
+  </section>
+
+  <!-- 6. PRODUIT -->
+  <section class="day" id="produit" data-t="40">
+    <div class="wrap product">
+      <div class="hotspot-wrap lift">
+        <img src="img/produit-curtis.jpg" alt="Borne O'javana chez Curtis, avec terminal de paiement noir sur le côté" loading="lazy">
+        <button class="hs" style="left:50%;top:30%" data-k="0" aria-expanded="false" aria-label="Écran tactile">1</button>
+        <button class="hs" style="left:78%;top:52%" data-k="2" aria-expanded="false" aria-label="Paiement intégré">2</button>
+        <button class="hs" style="left:40%;top:63%" data-k="3" aria-expanded="false" aria-label="Imprimante de tickets">3</button>
+        <button class="hs" style="left:50%;top:86%" data-k="5" aria-expanded="false" aria-label="Sur pied ou sur comptoir">4</button>
+      </div>
+      <div>
+        <div class="s-head lift" style="margin-bottom:0">
+          <span class="time">12:40</span>
+          <h2>Conçue pour tenir le rythme de vos midis.</h2>
+        </div>
+        <div class="specs" id="specs">
+          <div class="spec"><span class="spec-k">1</span><div><strong>Écran tactile 23,8"</strong><p>Grand, lumineux, anti-reflet, lisible même en plein jour.</p></div></div>
+          <div class="spec"><span class="spec-k dot" aria-hidden="true"></span><div><strong>Interface de commande</strong><p>La même logique que votre caisse O'javana, avec vos produits et vos prix.</p></div></div>
+          <div class="spec"><span class="spec-k">2</span><div><strong>Paiement intégré</strong><p>TWINT, Apple Pay, Google Pay et toutes les cartes.</p></div></div>
+          <div class="spec"><span class="spec-k">3</span><div><strong>Imprimante de tickets</strong><p>Le client repart avec son numéro de commande.</p></div></div>
+          <div class="spec"><span class="spec-k dot" aria-hidden="true"></span><div><strong>Envoi direct en cuisine</strong><p>Chaque commande arrive sans ressaisie.</p></div></div>
+          <div class="spec"><span class="spec-k">4</span><div><strong>Sur pied ou sur comptoir</strong><p>On l'adapte à votre espace.</p></div></div>
+        </div>
+        <div class="pay-logos" aria-label="Moyens de paiement acceptés">
+          <span class="pay twint">TWINT</span><span class="pay">Apple Pay</span><span class="pay">Google Pay</span><span class="pay">Visa</span><span class="pay">Mastercard</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. RÉSULTATS -->
+  <section class="day alt" id="resultats" data-t="45">
+    <div class="wrap">
+      <div class="results-head">
+        <div class="s-head lift" style="margin-bottom:0">
+          <span class="time">12:45</span>
+          <h2>Ce n'est pas un film. C'est déjà leur quotidien.</h2>
+          <p class="lead">Des restaurants de Suisse romande ont déjà changé leur heure de pointe avec la borne O'javana.</p>
+        </div>
+        <a class="btn btn-primary" href="#demo">Je veux la même chez moi</a>
+      </div>
+      <div class="reel" tabindex="0" aria-label="Photos des restaurants équipés">
+        <figure class="client"><img src="img/pizzafun.jpg" alt="Borne O'javana chez Pizza'Fun à Neuchâtel" loading="lazy"><figcaption><strong>Pizza'Fun</strong><span>Neuchâtel</span></figcaption></figure>
+        <figure class="client"><img src="img/gandhi.jpg" alt="Client souriant devant la borne O'javana du restaurant Gandhi" loading="lazy"><figcaption><strong>Gandhi</strong><span>Ville à confirmer</span></figcaption></figure>
+        <figure class="client"><img src="img/bigboss.jpg" alt="Borne O'javana avec tablette chez Big Boss Snack Bar" loading="lazy"><figcaption><strong>Big Boss Snack Bar</strong><span>Ville à confirmer</span></figcaption></figure>
+        <figure class="client"><img src="img/curtis.jpg" alt="Borne O'javana installée chez Curtis" loading="lazy"><figcaption><strong>Curtis</strong><span>Ville à confirmer</span></figcaption></figure>
+        <figure class="client"><img src="img/krousty.jpg" alt="Deux bornes O'javana chez Krousty" loading="lazy" style="object-position:20% 50%"><figcaption><strong>Krousty</strong><span>Ville à confirmer</span></figcaption></figure>
+      </div>
+      <p class="real-note" style="margin-top:18px">Photos réelles d'installations O'javana</p>
+    </div>
+  </section>
+
+  <!-- 8. POURQUOI -->
+  <section class="day" id="pourquoi" data-t="50">
+    <div class="wrap">
+      <div class="s-head lift">
+        <span class="time">12:50</span>
+        <h2>Une équipe suisse, à côté de chez vous.</h2>
+      </div>
+      <div class="why">
+        <div class="why-item lift"><h3>Basés à Neuchâtel</h3><p>Notre équipe est à Boudry. Quand vous appelez, quelqu'un décroche et répond en français, en allemand, en anglais ou en italien.</p></div>
+        <div class="why-item lift"><h3>Un seul système</h3><p>La borne fait partie de la caisse O'javana. Un seul interlocuteur, une seule carte à gérer, aucune double saisie.</p></div>
+        <div class="why-item lift"><h3>Installée en 48 h à 5 jours</h3><p>On programme votre carte et on installe la borne chez vous.</p></div>
+        <div class="why-item lift"><h3>La borne peut être offerte</h3><p>Avec l'abonnement Freedom, la borne est offerte aux établissements éligibles.</p></div>
+      </div>
+      <div class="chain lift">
+        <div><h3 style="color:#fff">Plusieurs établissements ?</h3><p style="margin-top:8px">Menus centralisés, tableau de bord multi-sites et un interlocuteur dédié. Parlons de votre réseau.</p></div>
+        <a href="#demo">Venir voir la borne au showroom de Boudry →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. DÉMO -->
+  <section class="day alt" id="demo" data-t="60">
+    <div class="wrap demo">
+      <div class="lift">
+        <div class="big-clock" aria-hidden="true">13:00</div>
+        <h2 style="margin-top:18px">Voyez votre heure de pointe changer. Sur votre propre carte.</h2>
+        <ul class="gets">
+          <li>30 minutes, en ligne ou dans notre showroom.</li>
+          <li>On charge votre carte sur la borne et vous la testez comme vos clients.</li>
+          <li>Vous recevez un devis matériel adapté à votre restaurant.</li>
+          <li>Gratuit et sans engagement.</li>
+        </ul>
+        <div class="call">Vous préférez appeler ? <strong>Numéro à confirmer</strong> · support@ojavana.com</div>
+      </div>
+
+      <div>
+        <form id="form" novalidate>
+          <div class="row2">
+            <div class="field"><label for="f-nom">Nom et prénom</label><input id="f-nom" name="nom" autocomplete="name" required><span class="msg" aria-live="polite"></span></div>
+            <div class="field"><label for="f-resto">Nom du restaurant</label><input id="f-resto" name="resto" autocomplete="organization" required><span class="msg" aria-live="polite"></span></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="f-mail">E-mail</label><input id="f-mail" name="mail" type="email" inputmode="email" autocomplete="email" required><span class="msg" aria-live="polite"></span></div>
+            <div class="field"><label for="f-tel">Téléphone</label><input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" required><span class="msg" aria-live="polite"></span></div>
+          </div>
+          <div class="field">
+            <label for="f-type">Type d'établissement</label>
+            <select id="f-type" name="type" required>
+              <option value="">Choisir…</option><option>Fast-food</option><option>Snack / kebab</option><option>Burger</option><option>Pizzeria</option><option>Café</option><option>Autre</option>
+            </select><span class="msg" aria-live="polite"></span>
+          </div>
+          <fieldset class="field" style="border:0;padding:0;margin:0">
+            <legend style="font-weight:600;font-size:.92rem;margin-bottom:7px">Nombre d'établissements</legend>
+            <div class="seg">
+              <input type="radio" name="sites" id="s1" value="1" checked><label for="s1">1</label>
+              <input type="radio" name="sites" id="s2" value="2-5"><label for="s2">2 à 5</label>
+              <input type="radio" name="sites" id="s3" value="5+"><label for="s3">Plus de 5</label>
+            </div>
+          </fieldset>
+          <button class="btn btn-primary" type="submit">Je réserve ma démonstration gratuite</button>
+          <div class="reassure"><span>✓ Gratuit</span><span>✓ Sans engagement</span><span>✓ 30 minutes</span></div>
+          <p class="next">Étape suivante : choisissez votre créneau dans notre agenda.</p>
+          <p class="privacy">Vos données servent uniquement à organiser votre démonstration. Voir notre politique de confidentialité.</p>
+        </form>
+
+        <div class="done" id="done" hidden>
+          <span class="time">13:00</span>
+          <p class="big">Merci, c'est noté.</p>
+          <p style="color:var(--mute)">Choisissez maintenant l'heure qui vous convient.</p>
+          <div class="cal">
+            <strong>Vos créneaux disponibles</strong>
+            <div class="slots" id="slots">
+              <button type="button" class="slot" aria-pressed="false">Lun 09:30</button><button type="button" class="slot" aria-pressed="false">Lun 15:00</button><button type="button" class="slot" aria-pressed="false">Mar 10:00</button><button type="button" class="slot" aria-pressed="false">Mer 14:30</button><button type="button" class="slot" aria-pressed="false">Jeu 16:00</button>
+            </div>
+            <small>Prototype : créneaux d'exemple. Ici s'affichera la page de réservation Google Agenda d'O'javana.</small>
+          </div>
+          <p style="font-size:.9rem;color:var(--mute)">Vous ne trouvez pas de créneau ? On vous rappelle dans la journée.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. FAQ -->
+  <section class="day" id="faq">
+    <div class="wrap">
+      <div class="s-head lift" style="margin-inline:auto;text-align:center;justify-items:center"><h2>Vos questions, nos réponses.</h2></div>
+      <div class="faq">
+        <details open><summary>Est-ce compliqué à utiliser ?</summary><p>Non. Vos clients choisissent avec de grandes images et quelques touches, comme sur un smartphone. Et pour votre équipe, l'interface suit la même logique que la caisse O'javana.</p></details>
+        <details><summary>Est-ce adapté à mon restaurant ?</summary><p>La borne est pensée pour les fast-foods, snacks, kebabs, burgers, pizzerias et cafés qui ont des heures de pointe. Elle existe sur pied ou sur comptoir. La démo sert justement à vérifier qu'elle convient à votre espace et à votre carte.</p></details>
+        <details><summary>Comment les commandes arrivent-elles en cuisine ?</summary><p>Directement, dès que le client a payé. Elles s'affichent sur un écran de cuisine (en option) ou sortent sur l'imprimante de la cuisine, sans ressaisie.</p></details>
+        <details><summary>Quels moyens de paiement sont acceptés ?</summary><p>TWINT, Apple Pay, Google Pay et les cartes de paiement, directement sur la borne.</p></details>
+        <details><summary>Combien coûte la borne ?</summary><p>La borne 23,8" coûte CHF 1'980. Avec l'abonnement Freedom (CHF 149 par mois et par poste), elle est incluse, et offerte aux établissements qui réalisent plus de CHF 20'000 de ventes par carte par mois avec les terminaux O'javana. La programmation de votre carte et l'installation sur place coûtent CHF 380, une seule fois. On vous fait un devis précis pendant la démo.</p></details>
+        <details><summary>Est-elle compatible avec mon système de caisse ?</summary><p>La borne fonctionne avec la caisse O'javana. C'est ce qui permet un seul système, une seule carte et zéro double saisie. Si vous avez une autre caisse, on vous montre en démo comment passer à O'javana.</p></details>
+        <details><summary>Combien de temps faut-il pour l'installation ?</summary><p>Entre 48 heures et 5 jours. On programme votre carte, on installe la borne et on forme votre équipe.</p></details>
+      </div>
+      <div class="faq-cta"><p style="font-weight:600">Une autre question ? Posez-la pendant la démo.</p><a class="btn btn-primary" href="#demo">Réserver ma démo gratuite</a></div>
+    </div>
+  </section>
+</main>
+<div class="film-modal" id="film-modal" role="dialog" aria-modal="true" aria-label="Film O'javana : 12:00" hidden><button class="x" type="button" aria-label="Fermer le film">×</button><video controls playsinline preload="none" poster="video/film-poster.jpg"><source src="video/film.mp4" type="video/mp4"></video></div>
+
+<footer>
+  <div class="wrap">
+    <div style="display:grid;gap:10px"><span class="logo"><span class="logo-mark" aria-hidden="true">j</span>o'javana</span><span>Rue des Saars 115, 2000 Neuchâtel · Showroom à Boudry</span><span>support@ojavana.com</span></div>
+    <div style="display:flex;gap:18px;align-items:flex-end"><span>Mentions légales</span><span>Confidentialité</span></div>
+  </div>
+</footer>
+
+<div class="sticky-cta" id="sticky"><a class="btn btn-primary" href="#demo">Réserver ma démo gratuite</a></div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Hero title word-by-word
+  var h1=document.getElementById('h1');
+  if(h1 && !reduce){
+    var words=h1.textContent.split(' ');
+    h1.innerHTML=words.map(function(w,i){return '<span class="w" style="animation-delay:'+(0.15+i*0.08)+'s">'+w+'</span>';}).join(' ');
+  }
+
+  // Scroll clock 12:00 → 13:00 + header day mode + sticky CTA
+  var clock=document.getElementById('clock'), top=document.getElementById('top'), sticky=document.getElementById('sticky');
+  var marks=[].slice.call(document.querySelectorAll('[data-t]'));
+  var sol=document.getElementById('solution'), demo=document.getElementById('demo'), hero=document.getElementById('hero');
+  function pad(n){return (n<10?'0':'')+n}
+  function onScroll(){
+    var y=window.scrollY+window.innerHeight*0.45, t=0;
+    for(var i=0;i<marks.length;i++){
+      var a=marks[i], b=marks[i+1];
+      var ay=a.offsetTop, by=b?b.offsetTop:ay+a.offsetHeight;
+      if(y>=ay){ var ta=+a.dataset.t, tb=b?+b.dataset.t:ta; t=ta+(tb-ta)*Math.min(1,(y-ay)/Math.max(1,by-ay)); }
+    }
+    t=Math.min(60,Math.round(t));
+    clock.textContent = t>=60 ? '13:00' : '12:'+pad(t);
+    var dayStart = sol.offsetTop + sol.offsetHeight*0.55;
+    top.classList.toggle('is-day', window.scrollY+60 > dayStart);
+    var dr=demo.getBoundingClientRect();
+    var inDemo = dr.top < window.innerHeight*0.8 && dr.bottom > 0;
+    sticky.classList.toggle('show', window.scrollY > hero.offsetHeight*0.6 && !inDemo);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  onScroll();
+
+
+  // Scroll-driven film: scroll position sets the video frame
+  (function(){
+    var sec=document.getElementById('histoire'), v=document.getElementById('story-v');
+    var bar=document.getElementById('story-bar'), st=document.getElementById('story-time'), hint=document.getElementById('story-hint');
+    if(!sec||!v) return;
+    if(reduce){ v.controls=true; return; }
+    var target=0, cur=0, dur=0, primed=false;
+    function prime(){ if(primed) return; primed=true; var p=v.play(); if(p&&p.then) p.then(function(){v.pause();}).catch(function(){}); else v.pause(); }
+    v.addEventListener('loadedmetadata',function(){dur=v.duration||0;});
+    function prog(){ var r=sec.getBoundingClientRect(), span=sec.offsetHeight-window.innerHeight; return Math.min(1,Math.max(0,-r.top/Math.max(1,span))); }
+    function update(){
+      var pr=prog(); target=pr*(dur||62.4);
+      bar.style.width=(pr*100).toFixed(2)+'%';
+      var m=Math.min(59,Math.floor(pr*60)); st.textContent='12:'+(m<10?'0':'')+m; st.classList.toggle('day',pr>0.5);
+      hint.classList.toggle('gone',pr>0.03);
+      var r=sec.getBoundingClientRect(); document.getElementById('clock').style.visibility=(r.top<60&&r.bottom>60)?'hidden':'';
+    }
+    function loop(){
+      if(!dur && v.duration && isFinite(v.duration)){ dur=v.duration; update(); }
+      if(dur){ cur+= (target-cur)*0.18; if(Math.abs(target-cur)<0.01) cur=target;
+        if(Math.abs(v.currentTime-cur)>0.04 && !v.seeking){ try{ v.currentTime=cur; }catch(e){} } }
+      requestAnimationFrame(loop);
+    }
+    window.addEventListener('scroll',function(){prime();update();},{passive:true});
+    window.addEventListener('touchstart',prime,{passive:true,once:true});
+    window.addEventListener('resize',update);
+    update(); requestAnimationFrame(loop);
+  })();
+  // Gentle lift on enter (content stays visible at rest)
+  if('IntersectionObserver' in window && !reduce){
+    var lifts=[].slice.call(document.querySelectorAll('.lift'));
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target);} });},{rootMargin:'0px 0px -8% 0px'});
+    lifts.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top>window.innerHeight){ el.classList.add('pre'); io.observe(el);} });
+  }
+
+  // How it works: kiosk screen changes per step
+  var ui=document.getElementById('ui'), prog=document.getElementById('prog');
+  var screens=[
+    '<div class="ui-title">Burgers</div><div class="ui-sub">Touchez un produit</div><div class="ui-grid"><div class="ui-tile">Classic</div><div class="ui-tile on">Cheese</div><div class="ui-tile">Chicken</div><div class="ui-tile">Veggie</div><div class="ui-tile">Kebab</div><div class="ui-tile">Wrap</div></div><div class="ui-foot"><span>Panier</span><span>CHF —</span></div>',
+    '<div class="ui-title">Cheese burger</div><div class="ui-sub">Personnalisez</div><div class="ui-list"><div class="ui-row"><s>Oignons</s><span class="ui-pill">Retiré</span></div><div class="ui-row"><span>Sauce à part</span><span class="ui-pill">Ajouté</span></div><div class="ui-row"><span>Taille XL</span><span>+</span></div></div><div class="ui-foot"><span>Sans oignons</span><span class="ui-btn">Valider</span></div>',
+    '<div class="ui-title">Vous aimerez aussi</div><div class="ui-sub">Suggestion pour votre commande</div><div class="ui-grid" style="grid-template-columns:1fr 1fr"><div class="ui-tile on">Frites</div><div class="ui-tile on">Boisson</div><div class="ui-tile">Dessert</div><div class="ui-tile">Sauce</div></div><div class="ui-foot"><span>Menu complet</span><span class="ui-btn">Ajouter</span></div>',
+    '<div class="ui-title">Paiement</div><div class="ui-pay"><div class="ui-sub">Choisissez votre moyen de paiement</div><div class="chips"><span class="chip on">TWINT</span><span class="chip">Apple Pay</span><span class="chip">Google Pay</span><span class="chip">Carte</span></div><div class="ui-sub">Approchez votre téléphone du terminal</div></div><div class="ui-foot"><span>Payé</span><span>✓</span></div>',
+    '<div class="ui-title">En cuisine</div><div class="ui-kds"><span><b>#42</b> · borne 1</span><span>1× Cheese burger</span><span>&nbsp;&nbsp;– SANS OIGNONS</span><span>&nbsp;&nbsp;– sauce à part</span><span>1× Frites · 1× Boisson</span></div><div class="ui-foot"><span>Ticket n° 42</span><span>Envoyée</span></div>'
+  ];
+  var stepEls=[].slice.call(document.querySelectorAll('.step')), cur=-1;
+  function setStep(i){
+    if(i===cur) return; cur=i;
+    stepEls.forEach(function(s,k){s.classList.toggle('active',k===i)});
+    ui.style.opacity=0;
+    setTimeout(function(){ui.innerHTML=screens[i];ui.style.opacity=1;}, reduce?0:180);
+    prog.style.width=((i+1)*20)+'%';
+  }
+  setStep(0);
+  stepEls.forEach(function(s,k){ s.addEventListener('click',function(){setStep(k)}); });
+  if('IntersectionObserver' in window){
+    var so=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting) setStep(+e.target.dataset.s); });},{rootMargin:'-45% 0px -45% 0px'});
+    stepEls.forEach(function(s){so.observe(s)});
+  }
+
+  // Product hotspots
+  var specs=[].slice.call(document.querySelectorAll('.spec'));
+  var hs=[].slice.call(document.querySelectorAll('.hs'));
+  hs.forEach(function(b){
+    b.addEventListener('click',function(){
+      var open=b.getAttribute('aria-expanded')==='true';
+      hs.forEach(function(x){x.setAttribute('aria-expanded','false')});
+      specs.forEach(function(s){s.classList.remove('on')});
+      if(!open){ b.setAttribute('aria-expanded','true'); var s=specs[+b.dataset.k]; s.classList.add('on'); }
+    });
+  });
+
+  // Film link (prototype)
+  var modal=document.getElementById('film-modal'), fv=modal.querySelector('video');
+  function closeFilm(){fv.pause();modal.hidden=true;document.getElementById('film').focus();}
+  document.getElementById('film').addEventListener('click',function(e){
+    e.preventDefault(); modal.hidden=false; fv.currentTime=0; var p=fv.play(); if(p&&p.catch)p.catch(function(){}); modal.querySelector('.x').focus();
+  });
+  modal.querySelector('.x').addEventListener('click',closeFilm);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeFilm();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeFilm();});
+
+  // Form validation + two-step booking
+  var form=document.getElementById('form'), done=document.getElementById('done');
+  var rules={
+    'f-nom':function(v){return v.trim().length>=2||'Indiquez votre nom et prénom.'},
+    'f-resto':function(v){return v.trim().length>=2||'Indiquez le nom de votre restaurant.'},
+    'f-mail':function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())||'Vérifiez votre e-mail, par exemple nom@restaurant.ch.'},
+    'f-tel':function(v){return v.replace(/[^\d]/g,'').length>=9||'Indiquez un numéro de téléphone complet.'},
+    'f-type':function(v){return !!v||'Choisissez votre type d\'établissement.'}
+  };
+  function check(id,show){
+    var el=document.getElementById(id), f=el.closest('.field'), r=rules[id](el.value);
+    if(r===true){f.classList.add('ok');f.classList.remove('bad');f.querySelector('.msg').textContent='';return true;}
+    if(show){f.classList.add('bad');f.classList.remove('ok');f.querySelector('.msg').textContent=r;}
+    return false;
+  }
+  Object.keys(rules).forEach(function(id){
+    var el=document.getElementById(id);
+    el.addEventListener('blur',function(){ if(el.value) check(id,true); });
+    el.addEventListener('input',function(){ if(el.closest('.field').classList.contains('bad')) check(id,true); else check(id,false); });
+    el.addEventListener('change',function(){ check(id,true); });
+  });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=true, first=null;
+    Object.keys(rules).forEach(function(id){ if(!check(id,true)){ ok=false; if(!first) first=id; } });
+    if(!ok){ document.getElementById(first).focus(); return; }
+    form.hidden=true; done.hidden=false; done.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
+  });
+  document.getElementById('slots').addEventListener('click',function(e){
+    var b=e.target.closest('.slot'); if(!b) return;
+    [].forEach.call(this.querySelectorAll('.slot'),function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    this.nextElementSibling.textContent='Créneau d\'exemple sélectionné : '+b.textContent+'. Dans la version finale, le rendez-vous s\'inscrit dans Google Agenda et une invitation part par e-mail.';
+  });
+})();
+</script>
