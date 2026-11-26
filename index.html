@@ -301,7 +301,7 @@ footer .logo{color:#fff}
 .hs-sticky{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding-top:64px}
 .js .hs-sticky .reel{overflow:visible;scroll-snap-type:none;padding-left:max(var(--gutter-l),calc((100vw - var(--wrap)) / 2 + 16px));padding-right:var(--gutter-r);will-change:transform;width:max-content}
 .hs-sticky .client{flex:0 0 clamp(240px,28vw,360px)}
-.hs-sticky .client img{aspect-ratio:auto;height:min(52vh,480px)}
+.hs-sticky .client img{aspect-ratio:auto;height:min(calc(100vh - 440px),480px);min-height:180px}
 .hs-sticky .results-head .s-head h2{font-size:clamp(1.8rem,3.8vw,3rem)}
 @media (max-width:900px){
   .how-sticky{grid-template-columns:1fr;gap:18px;align-content:center;top:56px;height:calc(100svh - 56px)}
@@ -317,7 +317,11 @@ footer .logo{color:#fff}
   .switch-kiosk{max-width:min(240px,34svh)}
   .switch h2{font-size:clamp(1.7rem,7vw,2.4rem)}
   .switch .lead{font-size:1rem}
-  .hs-sticky .client img{height:min(46svh,420px)}
+  .hs-sticky .client img{height:min(calc(100svh - 440px),420px);min-height:170px}
+  .hs-sticky .results-head .btn{display:none}
+  .hs-sticky .results-head .lead{font-size:1rem}
+  .hs-sticky .reel{margin-top:22px}
+  .hs-sticky{padding-bottom:84px}
 }
 
 @media (max-width:900px){
@@ -545,6 +549,7 @@ footer .logo{color:#fff}
           <span class="time">12:45</span>
           <h2>Ce n'est pas un film. C'est déjà leur quotidien.</h2>
           <p class="lead">Des restaurants de Suisse romande ont déjà changé leur heure de pointe avec la borne O'javana.</p>
+          <p class="real-note">Photos réelles d'installations O'javana</p>
         </div>
         <a class="btn btn-primary" href="#demo">Je veux la même chez moi</a>
       </div>
@@ -555,7 +560,6 @@ footer .logo{color:#fff}
         <figure class="client"><img src="img/curtis.jpg" alt="Borne O'javana installée chez Curtis" loading="lazy"><figcaption><strong>Curtis</strong><span>Courtelary</span></figcaption></figure>
         <figure class="client"><img src="img/krousty.jpg" alt="Deux bornes O'javana chez Krousty" loading="lazy" style="object-position:20% 50%"><figcaption><strong>Krousty</strong><span>Lausanne</span></figcaption></figure>
       </div>
-    <div class="wrap"><p class="real-note" style="margin-top:18px">Photos réelles d'installations O'javana</p></div>
    </div></div>
   </section>
 
@@ -604,7 +608,7 @@ footer .logo{color:#fff}
           </ol>
           <a class="btn btn-primary book-btn" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Je réserve mon appel</a>
           <div class="reassure"><span>✓ Gratuit</span><span>✓ Sans engagement</span><span>✓ 15 minutes</span></div>
-          <p class="privacy">La réservation s'ouvre dans Google Agenda. Vos données servent uniquement à organiser votre appel et votre démonstration.</p>
+          <p class="privacy">La réservation s'ouvre dans Google Agenda. Vos données servent uniquement à organiser votre appel et votre démonstration. <a href="confidentialite.html">Confidentialité</a></p>
         </div>
       </div>
     </div>
@@ -631,8 +635,8 @@ footer .logo{color:#fff}
 
 <footer>
   <div class="wrap">
-    <div style="display:grid;gap:10px"><span class="logo"><span class="logo-mark" aria-hidden="true">j</span>o'javana</span><span>Rue des Saars 115, 2000 Neuchâtel · Showroom à Boudry</span><span>support@ojavana.com</span></div>
-    <div style="display:flex;gap:18px;align-items:flex-end"><span>Mentions légales</span><span>Confidentialité</span></div>
+    <div style="display:grid;gap:10px"><span class="logo"><span class="logo-mark" aria-hidden="true">j</span>o'javana</span><span>Rue des Saars 115, 2000 Neuchâtel · Showroom à Boudry</span></div>
+    <div style="display:flex;gap:18px;align-items:flex-end"><a href="mentions-legales.html" style="color:inherit">Mentions légales</a><a href="confidentialite.html" style="color:inherit">Confidentialité</a></div>
   </div>
 </footer>
 
