@@ -118,8 +118,9 @@ section{padding-block:clamp(72px,11vw,140px)}
 .screen-ui{position:absolute;left:12%;right:12%;top:8%;bottom:39%;border-radius:6px;background:#fff;display:flex;flex-direction:column;padding:12px;gap:8px;font-family:var(--f-body);color:var(--ink);box-shadow:0 0 0 1px rgba(0,0,0,.06);transition:opacity .35s}
 .ui-title{font:700 .9rem/1.2 var(--f-body)}
 .ui-sub{font-size:.68rem;color:var(--mute)}
-.ui-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:1}
-.ui-tile{border-radius:6px;background:var(--day-2);display:grid;place-items:end center;padding:4px;font-size:.55rem;font-weight:600;transition:background .3s,box-shadow .3s}
+.ui-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(0,1fr);gap:6px;flex:1;min-height:0}
+.ui-tile{border-radius:6px;background:var(--day-2);display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;align-items:center;padding:4px 4px 5px;font-size:.55rem;font-weight:600;transition:background .3s,box-shadow .3s;min-height:0}
+.ui-tile svg{width:auto;max-width:82%;height:100%;min-height:0;display:block}
 .ui-tile.on{background:#d9ecea;box-shadow:inset 0 0 0 2px var(--teal)}
 .ui-list{display:grid;gap:6px;flex:1;align-content:start}
 .ui-row{display:flex;justify-content:space-between;align-items:center;font-size:.7rem;padding:6px 8px;border-radius:6px;background:var(--day-2)}
@@ -294,6 +295,7 @@ footer .logo{color:#fff}
 .story-hint.gone{opacity:0}
 @media (max-aspect-ratio:1/1){.story-pin video{object-fit:contain;height:auto}}
 @media (prefers-reduced-motion:reduce){.story{height:auto}.story-pin{position:relative;height:auto;aspect-ratio:16/9}.story-hint,.story-bar{display:none}}
+.screen-logo{position:absolute;left:50%;top:71.4%;transform:translate(-50%,-50%);background:#eceeec;color:#2a3233;font:700 .5rem/1 var(--f-body);padding:1px 5px;border-radius:1px;box-shadow:0 0 3px 2px #eceeec}
 </style>
 
 <header class="top" id="top">
@@ -388,7 +390,7 @@ footer .logo{color:#fff}
         <div class="how-pin">
           <div class="progress" aria-hidden="true"><i id="prog"></i></div>
           <div class="screen">
-            <img src="img/interface.jpg" alt="Borne O'javana montrant la grille de produits" loading="lazy">
+            <img src="img/interface.jpg" alt="Borne O'javana montrant la grille de produits" loading="lazy"><span class="screen-logo" aria-hidden="true">o'javana</span>
             <div class="screen-ui" id="ui" aria-live="polite"></div>
           </div>
         </div>
@@ -652,12 +654,31 @@ footer .logo{color:#fff}
     lifts.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top>window.innerHeight){ el.classList.add('pre'); io.observe(el);} });
   }
 
+
+  // Product illustrations for the kiosk mockup (inline SVG, no external files)
+  var bun='<path d="M10 26c0-10 10-16 22-16s22 6 22 16z" fill="#e0a24a"/><g fill="#fff6e0"><ellipse cx="24" cy="17" rx="1.6" ry="1"/><ellipse cx="32" cy="14" rx="1.6" ry="1"/><ellipse cx="40" cy="17" rx="1.6" ry="1"/><ellipse cx="30" cy="20" rx="1.6" ry="1"/></g>';
+  var bot='<rect x="11" y="40" width="42" height="7" rx="3.5" fill="#d8953f"/>';
+  function burger(mid){return '<svg viewBox="0 0 64 52" aria-hidden="true">'+bun+mid+bot+'</svg>';}
+  var lettuce='<path d="M9 28q4 4 8 0t8 0 8 0 8 0 8 0 8 0v3H9z" fill="#5fae4e"/>';
+  var tomato='<rect x="12" y="30" width="40" height="3.5" rx="1.7" fill="#d9483b"/>';
+  var ICON={
+    Classic:burger(lettuce+tomato+'<rect x="10" y="33.5" width="44" height="7" rx="3.5" fill="#6b3b22"/>'),
+    Cheese:burger(lettuce+'<path d="M10 31h44l-6 6-5-3-6 5-5-4-6 5-5-4-6 4z" fill="#f4c430"/><rect x="10" y="34" width="44" height="6.5" rx="3.2" fill="#6b3b22"/>'),
+    Chicken:burger(lettuce+'<rect x="9" y="31" width="46" height="9" rx="4.5" fill="#d98a2b"/><g fill="#b86c1c"><circle cx="18" cy="35" r="1.2"/><circle cx="27" cy="34" r="1.2"/><circle cx="37" cy="36" r="1.2"/><circle cx="46" cy="34" r="1.2"/></g>'),
+    Veggie:burger(lettuce+tomato+'<rect x="10" y="33.5" width="44" height="7" rx="3.5" fill="#7c9a3d"/><g fill="#5f7b2a"><circle cx="20" cy="37" r="1.3"/><circle cx="31" cy="36" r="1.3"/><circle cx="43" cy="37.5" r="1.3"/></g>'),
+    Kebab:'<svg viewBox="0 0 64 52" aria-hidden="true"><path d="M8 40c4-22 44-22 48 0z" fill="#ecd3a0"/><path d="M14 36c6-12 30-12 36 0" fill="#8a4b2a"/><path d="M16 33l6-6M24 31l5-7M33 30l3-7M41 31l2-6" stroke="#b56a3c" stroke-width="2.5" stroke-linecap="round"/><path d="M15 36q5-3 9 0t9 0 9 0 7 0" stroke="#5fae4e" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M8 40h48v4c-14 4-34 4-48 0z" fill="#e2c288"/></svg>',
+    Wrap:'<svg viewBox="0 0 64 52" aria-hidden="true"><g transform="rotate(-18 32 26)"><rect x="8" y="17" width="44" height="18" rx="9" fill="#efd9a6"/><ellipse cx="50" cy="26" rx="6" ry="9" fill="#e7c98a"/><ellipse cx="50" cy="26" rx="4" ry="6.5" fill="#5fae4e"/><circle cx="49" cy="24" r="1.8" fill="#d9483b"/><circle cx="51.5" cy="28" r="1.6" fill="#c9743c"/><path d="M18 18v16M28 17v18M38 17v18" stroke="#dcc08a" stroke-width="1.2"/></g></svg>',
+    Frites:'<svg viewBox="0 0 64 52" aria-hidden="true"><g fill="#f2c14e"><rect x="20" y="6" width="4" height="22" rx="1"/><rect x="26" y="3" width="4" height="25" rx="1"/><rect x="32" y="5" width="4" height="23" rx="1"/><rect x="38" y="7" width="4" height="21" rx="1"/><rect x="23" y="9" width="4" height="19" rx="1" transform="rotate(-8 25 18)"/><rect x="35" y="9" width="4" height="19" rx="1" transform="rotate(8 37 18)"/></g><path d="M16 22h32l-4 26H20z" fill="#d6362e"/><path d="M20 30h24" stroke="#fff" stroke-width="2" opacity=".6"/></svg>',
+    Boisson:'<svg viewBox="0 0 64 52" aria-hidden="true"><path d="M34 2l4 10" stroke="#1e5b5a" stroke-width="2.5" stroke-linecap="round"/><path d="M20 12h24l-3 36H23z" fill="#e9eef0"/><path d="M21 20h22l-2.3 28H23.3z" fill="#7a3b1e"/><rect x="18" y="10" width="28" height="4" rx="2" fill="#cfd8db"/><g fill="#fff" opacity=".7"><circle cx="28" cy="27" r="1.2"/><circle cx="35" cy="33" r="1"/><circle cx="30" cy="39" r="1.2"/></g></svg>',
+    Dessert:'<svg viewBox="0 0 64 52" aria-hidden="true"><circle cx="32" cy="27" r="19" fill="#c98b4e"/><g fill="#4a2a17"><circle cx="24" cy="20" r="2.6"/><circle cx="36" cy="17" r="2.2"/><circle cx="41" cy="28" r="2.6"/><circle cx="27" cy="33" r="2.4"/><circle cx="34" cy="38" r="2"/><circle cx="21" cy="28" r="1.8"/></g></svg>',
+    Sauce:'<svg viewBox="0 0 64 52" aria-hidden="true"><ellipse cx="32" cy="38" rx="20" ry="7" fill="#cfd8db"/><path d="M12 30h40v8c0 4-9 7-20 7s-20-3-20-7z" fill="#e9eef0"/><ellipse cx="32" cy="30" rx="20" ry="7" fill="#f4f6f7"/><ellipse cx="32" cy="30" rx="16" ry="5" fill="#d6362e"/><path d="M26 29q6-3 12 0" stroke="#f08c80" stroke-width="1.5" fill="none"/></svg>'
+  };
   // How it works: kiosk screen changes per step
   var ui=document.getElementById('ui'), prog=document.getElementById('prog');
   var screens=[
-    '<div class="ui-title">Burgers</div><div class="ui-sub">Touchez un produit</div><div class="ui-grid"><div class="ui-tile">Classic</div><div class="ui-tile on">Cheese</div><div class="ui-tile">Chicken</div><div class="ui-tile">Veggie</div><div class="ui-tile">Kebab</div><div class="ui-tile">Wrap</div></div><div class="ui-foot"><span>Panier</span><span>CHF —</span></div>',
+    '<div class="ui-title">Burgers</div><div class="ui-sub">Touchez un produit</div><div class="ui-grid"><div class="ui-tile">'+(ICON['Classic']||'')+'<span>Classic</span></div><div class="ui-tile on">'+(ICON['Cheese']||'')+'<span>Cheese</span></div><div class="ui-tile">'+(ICON['Chicken']||'')+'<span>Chicken</span></div><div class="ui-tile">'+(ICON['Veggie']||'')+'<span>Veggie</span></div><div class="ui-tile">'+(ICON['Kebab']||'')+'<span>Kebab</span></div><div class="ui-tile">'+(ICON['Wrap']||'')+'<span>Wrap</span></div></div><div class="ui-foot"><span>Panier</span><span>CHF —</span></div>',
     '<div class="ui-title">Cheese burger</div><div class="ui-sub">Personnalisez</div><div class="ui-list"><div class="ui-row"><s>Oignons</s><span class="ui-pill">Retiré</span></div><div class="ui-row"><span>Sauce à part</span><span class="ui-pill">Ajouté</span></div><div class="ui-row"><span>Taille XL</span><span>+</span></div></div><div class="ui-foot"><span>Sans oignons</span><span class="ui-btn">Valider</span></div>',
-    '<div class="ui-title">Vous aimerez aussi</div><div class="ui-sub">Suggestion pour votre commande</div><div class="ui-grid" style="grid-template-columns:1fr 1fr"><div class="ui-tile on">Frites</div><div class="ui-tile on">Boisson</div><div class="ui-tile">Dessert</div><div class="ui-tile">Sauce</div></div><div class="ui-foot"><span>Menu complet</span><span class="ui-btn">Ajouter</span></div>',
+    '<div class="ui-title">Vous aimerez aussi</div><div class="ui-sub">Suggestion pour votre commande</div><div class="ui-grid" style="grid-template-columns:1fr 1fr"><div class="ui-tile on">'+(ICON['Frites']||'')+'<span>Frites</span></div><div class="ui-tile on">'+(ICON['Boisson']||'')+'<span>Boisson</span></div><div class="ui-tile">'+(ICON['Dessert']||'')+'<span>Dessert</span></div><div class="ui-tile">'+(ICON['Sauce']||'')+'<span>Sauce</span></div></div><div class="ui-foot"><span>Menu complet</span><span class="ui-btn">Ajouter</span></div>',
     '<div class="ui-title">Paiement</div><div class="ui-pay"><div class="ui-sub">Choisissez votre moyen de paiement</div><div class="chips"><span class="chip on">TWINT</span><span class="chip">Apple Pay</span><span class="chip">Google Pay</span><span class="chip">Carte</span></div><div class="ui-sub">Approchez votre téléphone du terminal</div></div><div class="ui-foot"><span>Payé</span><span>✓</span></div>',
     '<div class="ui-title">En cuisine</div><div class="ui-kds"><span><b>#42</b> · borne 1</span><span>1× Cheese burger</span><span>&nbsp;&nbsp;– SANS OIGNONS</span><span>&nbsp;&nbsp;– sauce à part</span><span>1× Frites · 1× Boisson</span></div><div class="ui-foot"><span>Ticket n° 42</span><span>Envoyée</span></div>'
   ];
