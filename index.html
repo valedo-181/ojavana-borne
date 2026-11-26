@@ -467,9 +467,25 @@ footer .logo{color:#fff}
 .offer-left i{width:10px;height:10px;border-radius:50%;background:#c7ee5f;box-shadow:0 0 0 4px rgba(199,238,95,.25)}
 .offer .btn-primary{justify-self:start;background:#c7ee5f;color:var(--ink)}
 .offer-small{font-size:.85rem;color:#9fb0c4!important}
+.offer-flag{display:inline-block;background:#c7ee5f;color:var(--ink);padding:.35em .7em;border-radius:6px;margin-right:.6em}
+.offer{position:relative;outline:2px solid rgba(199,238,95,.0);animation:offerGlow 3.2s ease-in-out infinite}
+@keyframes offerGlow{0%,100%{box-shadow:0 30px 60px -30px rgba(15,26,26,.55),0 0 0 0 rgba(199,238,95,0)}50%{box-shadow:0 30px 60px -30px rgba(15,26,26,.55),0 0 0 6px rgba(199,238,95,.35)}}
+.offer-price{padding:22px 28px!important;box-shadow:0 14px 30px -14px rgba(199,238,95,.6)}
+.offer-price b{font-size:clamp(2.6rem,5.4vw,3.8rem)!important;letter-spacing:-.02em}
+.offer-price em{display:inline-block;margin-top:10px;font:700 .95rem/1 var(--f-body);font-style:normal;background:var(--ink);color:#c7ee5f;padding:.5em .8em;border-radius:6px}
+.offer-badge{position:absolute;z-index:2;top:22px;left:22px;width:132px;height:132px;border-radius:50%;background:#c7ee5f;color:var(--ink);display:grid;place-content:center;text-align:center;transform:rotate(-10deg);box-shadow:0 16px 34px -12px rgba(0,0,0,.5);animation:badgePop 2.4s ease-in-out infinite}
+.offer-badge b{font:800 2.3rem/1 var(--f-display);font-stretch:85%}
+.offer-badge small{font:700 .68rem/1.2 var(--f-mono);letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+@keyframes badgePop{0%,100%{transform:rotate(-10deg) scale(1)}50%{transform:rotate(-10deg) scale(1.07)}}
+.head-promo{display:inline-flex;align-items:center;gap:.3em;padding:.55em .9em;border-radius:999px;background:#c7ee5f;color:var(--ink);font:700 .85rem/1 var(--f-body);text-decoration:none;white-space:nowrap}
+.sticky-promo{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-size:.8rem;color:var(--ink);text-decoration:none;margin-bottom:8px}
+.sticky-promo b{background:#c7ee5f;padding:.15em .45em;border-radius:4px;margin-right:.3em}
+@media (max-width:1100px){.head-promo span{display:none}}
+@media (max-width:600px){.head-promo{display:none}.offer-badge{width:104px;height:104px;top:14px;left:14px}.offer-badge b{font-size:1.8rem}}
+@media (prefers-reduced-motion:reduce){.offer,.offer-badge{animation:none}}
 .offer-media{position:relative;min-height:360px}
 .offer-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.promo-pill{display:inline-flex;align-items:center;gap:.6em;margin-bottom:18px;padding:.5em 1em;border-radius:999px;background:#c7ee5f;color:var(--ink);font-weight:700;font-size:.92rem;text-decoration:none}
+.promo-pill{width:fit-content;max-width:100%;display:inline-flex;align-items:center;gap:.6em;margin-bottom:18px;padding:.5em 1em;border-radius:999px;background:#c7ee5f;color:var(--ink);font-weight:700;font-size:.92rem;text-decoration:none}
 @media (max-width:520px){.pp-l{display:none}}
 @media (max-width:900px){#offre{padding-top:16px}.offer{grid-template-columns:1fr}.offer-media{min-height:300px;order:-1}}
 </style>
@@ -482,6 +498,7 @@ footer .logo{color:#fff}
   <div class="wrap">
     <a class="logo" href="#hero" aria-label="O'javana, retour en haut"><span class="logo-mark" aria-hidden="true">j</span>o'javana</a>
     <div class="head-r">
+      <a class="head-promo" href="#offre">−55 % <span>· 50 premières commandes</span></a>
       <span class="clock" id="clock" aria-label="Heure du service">12:00</span>
       <a class="btn btn-primary" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Réserver mon appel gratuit</a>
     </div>
@@ -587,6 +604,24 @@ footer .logo{color:#fff}
     </div>
   </section>
 
+  <!-- OFFRE -->
+  <section class="day" id="offre">
+    <div class="wrap">
+      <div class="offer rv">
+        <div class="offer-copy">
+          <span class="offer-k"><span class="offer-flag">Offre de lancement</span> <span style="white-space:nowrap">Tout-en-un</span></span>
+          <h2>Caisse + borne + terminal.</h2>
+          <p>Votre restaurant équipé pour prendre les commandes, encaisser et transmettre directement en cuisine.</p>
+          <div class="offer-price"><b>CHF 1’999.–</b><span>au lieu de <s>CHF 4’400.–</s></span><em>Vous économisez CHF 2’401.–</em></div>
+          <div class="offer-left"><i aria-hidden="true"></i>Réservé aux 50 premières commandes</div>
+          <a class="btn btn-primary" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Réserver mon appel gratuit</a>
+          <p class="offer-small">Offre valable pour les 50 premières commandes. On vous explique tout pendant l'appel.</p>
+        </div>
+        <div class="offer-media"><span class="offer-badge" aria-hidden="true"><b>−55 %</b><small>50 premières<br>commandes</small></span><img src="img/produit-curtis.jpg" alt="Borne O'javana installée chez Curtis à Courtelary" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- 7. RÉSULTATS -->
   <section class="day alt" id="resultats" data-t="45">
    <div class="hs-scroll" id="hs-scroll"><div class="hs-sticky">
@@ -626,24 +661,6 @@ footer .logo{color:#fff}
       <div class="chain rv">
         <div><h3 style="color:#fff">Plusieurs établissements ?</h3><p style="margin-top:8px">Menus centralisés, tableau de bord multi-sites et un interlocuteur dédié. Parlons de votre réseau.</p></div>
         <a href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Parler de mon réseau →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- OFFRE -->
-  <section class="day" id="offre">
-    <div class="wrap">
-      <div class="offer rv">
-        <div class="offer-copy">
-          <span class="offer-k">Offre de lancement · Tout-en-un</span>
-          <h2>Caisse + borne + terminal.</h2>
-          <p>Votre restaurant équipé pour prendre les commandes, encaisser et transmettre directement en cuisine.</p>
-          <div class="offer-price"><b>CHF 1’999.–</b><span>au lieu de <s>CHF 4’400.–</s> · −55 %</span></div>
-          <div class="offer-left"><i aria-hidden="true"></i>Réservé aux 50 premières commandes</div>
-          <a class="btn btn-primary" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Réserver mon appel gratuit</a>
-          <p class="offer-small">Offre valable pour les 50 premières commandes. On vous explique tout pendant l'appel.</p>
-        </div>
-        <div class="offer-media"><img src="img/produit-curtis.jpg" alt="Borne O'javana installée chez Curtis à Courtelary" loading="lazy"></div>
       </div>
     </div>
   </section>
@@ -705,7 +722,7 @@ footer .logo{color:#fff}
   </div>
 </footer>
 
-<div class="sticky-cta" id="sticky"><a class="btn btn-primary" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Réserver mon appel gratuit</a></div>
+<div class="sticky-cta" id="sticky"><a class="sticky-promo" href="#offre"><b>−55 %</b> Caisse + borne + terminal à CHF 1’999.–</a><a class="btn btn-primary" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Réserver mon appel gratuit</a></div>
 
 <script>
 (function(){
