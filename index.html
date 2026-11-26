@@ -440,6 +440,24 @@ footer .logo{color:#fff}
 .no3d .b3-chs{position:static;width:auto;grid-column:1;grid-row:auto;display:grid;gap:18px}
 .no3d .b3-ch{position:static;opacity:1;visibility:visible;transform:none}
 .no3d .b3-cta{position:static;opacity:1;visibility:visible;transform:none;justify-self:start}
+.offer{display:grid;grid-template-columns:1.1fr .9fr;border-radius:22px;overflow:hidden;background:#17233a;color:#fff}
+.offer-copy{padding:clamp(28px,5vw,56px);display:grid;gap:18px;align-content:center}
+.offer-k{color:#2fb6c8;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.9rem}
+.offer h2{color:#fff;font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.05}
+.offer p{color:#d3dbe6;max-width:46ch}
+.offer-price{background:#c7ee5f;color:#17233a;border-radius:14px;padding:18px 24px;justify-self:start}
+.offer-price b{display:block;font:800 clamp(2rem,4vw,2.8rem)/1 var(--f-display,inherit)}
+.offer-price span{display:block;margin-top:6px;font-size:.98rem}
+.offer-price s{opacity:.75}
+.offer-left{display:flex;align-items:center;gap:10px;font-weight:600;color:#fff}
+.offer-left i{width:10px;height:10px;border-radius:50%;background:#c7ee5f;box-shadow:0 0 0 4px rgba(199,238,95,.25)}
+.offer .btn-primary{justify-self:start;background:#c7ee5f;color:#17233a}
+.offer-small{font-size:.85rem;color:#9fb0c4!important}
+.offer-media{position:relative;min-height:360px}
+.offer-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.promo-pill{display:inline-flex;align-items:center;gap:.6em;margin-bottom:18px;padding:.5em 1em;border-radius:999px;background:#c7ee5f;color:#17233a;font-weight:700;font-size:.92rem;text-decoration:none}
+@media (max-width:520px){.pp-l{display:none}}
+@media (max-width:900px){.offer{grid-template-columns:1fr}.offer-media{min-height:300px;order:-1}}
 </style>
 
 </head>
@@ -462,6 +480,7 @@ footer .logo{color:#fff}
     <div class="hero-media" id="hero-media"><video autoplay muted loop playsinline preload="auto" poster="img/hero-krousty.jpg" aria-hidden="true"><source src="video/hero.mp4" type="video/mp4"></video></div>
     <div class="wrap">
       <div class="hero-copy" id="hero-copy">
+        <a class="promo-pill" href="#offre"><span class="pp-l">Offre de lancement · </span>50 premières commandes à −55 % →</a>
         <span class="time">12:00</span>
         <h1 id="h1">L'heure de pointe, sans la file.</h1>
         <p class="sub">La borne de commande O'javana prend les commandes et les paiements pendant que votre équipe prépare et accueille.</p>
@@ -579,6 +598,24 @@ footer .logo{color:#fff}
       <div class="chain rv">
         <div><h3 style="color:#fff">Plusieurs établissements ?</h3><p style="margin-top:8px">Menus centralisés, tableau de bord multi-sites et un interlocuteur dédié. Parlons de votre réseau.</p></div>
         <a href="#demo">Venir voir la borne au showroom de Boudry →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFRE -->
+  <section class="day" id="offre">
+    <div class="wrap">
+      <div class="offer rv">
+        <div class="offer-copy">
+          <span class="offer-k">Offre de lancement · Tout-en-un</span>
+          <h2>Caisse + borne + terminal.</h2>
+          <p>Votre restaurant équipé pour prendre les commandes, encaisser et transmettre directement en cuisine.</p>
+          <div class="offer-price"><b>CHF 1’999.–</b><span>au lieu de <s>CHF 4’400.–</s> · −55 %</span></div>
+          <div class="offer-left"><i aria-hidden="true"></i>Réservé aux 50 premières commandes</div>
+          <a class="btn btn-primary" href="#demo">Réserver mon appel gratuit</a>
+          <p class="offer-small">Offre valable pour les 50 premières commandes. On vous explique tout pendant l'appel.</p>
+        </div>
+        <div class="offer-media"><img src="img/produit-curtis.jpg" alt="Borne O'javana installée chez Curtis à Courtelary" loading="lazy"></div>
       </div>
     </div>
   </section>
