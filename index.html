@@ -8,7 +8,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Instrument+Serif&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
 /* Layout: one lunch peak, 12:00 → 13:00. Night (problem) sections give way to daylight (solution) sections; a scroll-driven clock is the thread. */
 :root{
@@ -367,6 +367,67 @@ footer .logo{color:#fff}
 @media (max-aspect-ratio:1/1){.story-pin video{object-fit:contain;height:auto}}
 @media (prefers-reduced-motion:reduce){.story{height:auto}.story-pin{position:relative;height:auto;aspect-ratio:16/9}.story-hint,.story-bar{display:none}}
 .screen-logo{position:absolute;left:50%;top:71.4%;transform:translate(-50%,-50%);background:#eceeec;color:#2a3233;font:700 .5rem/1 var(--f-body);padding:1px 5px;border-radius:1px;box-shadow:0 0 3px 2px #eceeec}
+
+/* ===== 3D kiosk experience (scroll-driven stage) ===== */
+.b3{height:1000vh;padding:0;position:relative;background:var(--b3bg,#0f1414)}
+.b3-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(70% 60% at 50% 58%,var(--b3hi,#1d3533) 0%,var(--b3bg,#0f1414) 70%);color:#fff}
+#b3-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.b3-fallback{display:none}
+.b3-ui{position:absolute;inset:0;padding:calc(64px + 3vh) clamp(16px,3.4vw,56px) clamp(22px,4vh,44px);pointer-events:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr auto}
+.b3-head{grid-column:1;grid-row:1;display:grid;gap:12px;align-content:start}
+.b3-kick{font:600 .7rem/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.b3-title{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-stretch:normal;letter-spacing:-.01em;font-size:clamp(2.1rem,3.6vw,3.4rem);line-height:1;color:#fff}
+.b3-steps{grid-column:1;grid-row:2;align-self:center;list-style:none;margin:0;padding:0 0 0 14px;border-left:1px solid rgba(255,255,255,.22);display:grid;gap:12px;pointer-events:auto}
+.b3-steps li{font:500 .82rem/1.2 var(--f-body);color:rgba(255,255,255,.45);display:flex;gap:10px;cursor:pointer;position:relative;transition:color .35s}
+.b3-steps li b{font:600 .7rem/1.5 var(--f-mono);letter-spacing:.08em}
+.b3-steps li.on{color:#fff}
+.b3-steps li.on::before{content:"";position:absolute;left:-15.5px;top:-2px;bottom:-2px;width:2px;background:#fff}
+.b3-chs{grid-column:2;grid-row:1 / span 2;position:relative;justify-self:end;width:min(340px,30vw)}
+.b3-ch{position:absolute;right:0;top:0;width:100%;opacity:0;visibility:hidden;will-change:opacity,transform}
+.b3-lead{font-size:.98rem;line-height:1.5;color:rgba(255,255,255,.86)}
+.b3-ch dl{margin:0;display:none}
+.b3-big{grid-column:2;grid-row:3;justify-self:end;align-self:end;text-align:right;display:grid;gap:4px}
+.b3-big span{font-family:"Instrument Serif",Georgia,serif;font-size:clamp(3.4rem,7vw,6.2rem);line-height:.9;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.b3-big small{font:600 .66rem/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.b3-specs{grid-column:1;grid-row:3;align-self:end}
+.b3-spec-list{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 22px;font-size:.8rem;max-width:420px}
+.b3-spec-list dt{font:600 .66rem/1.6 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.b3-spec-list dd{margin:0;color:rgba(255,255,255,.86)}
+.b3-cta{position:absolute;right:clamp(16px,3.4vw,56px);bottom:calc(clamp(22px,4vh,44px) + clamp(3.4rem,7vw,6.2rem) + 34px);pointer-events:auto;opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s;visibility:hidden}
+.b3-cta.on{opacity:1;transform:none;visibility:visible}
+.b3-hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font:600 .66rem/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);transition:opacity .4s}
+.b3-labels{position:absolute;inset:0;pointer-events:none}
+.b3-label{position:absolute;left:0;top:0;white-space:nowrap;font:600 .72rem/1 var(--f-mono);letter-spacing:.06em;color:#fff;background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.35);padding:.55em .85em;border-radius:99px;opacity:0;transition:opacity .4s;margin:-13px 0 0 16px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.b3-label::before{content:"";position:absolute;left:-20px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.22)}
+.b3-label.on{opacity:1}
+.b3-label.l::before{left:auto;right:-20px}
+@media (max-width:900px){
+  .b3-ui{grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto auto;padding:calc(56px + 14px) 16px 92px}
+  .b3-head{grid-column:1 / span 2}
+  .b3-title{font-size:1.6rem}
+  .b3-kick{display:none}
+  .b3-steps{display:none}
+  .b3-chs{grid-column:1 / span 2;grid-row:3;width:auto;justify-self:stretch;min-height:7.5em}
+  .b3-ch{top:auto;bottom:0}
+  .b3-lead{font-size:.92rem;background:rgba(0,0,0,.32);padding:12px 14px;border-radius:12px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .b3-specs{display:none}
+  .b3-big{grid-column:2;grid-row:1;align-self:start;margin-top:4px}
+  .b3-big span{font-size:2.2rem}
+  .b3-big small{display:none}
+  .b3-head{grid-column:1}
+  .b3-cta{display:none}
+  .b3-hint{display:none}
+  .b3-label{font-size:.6rem}
+}
+/* Without WebGL or with reduced motion: a readable static version */
+.no3d .b3{height:auto}
+.no3d .b3-stage{position:relative;height:auto;padding:100px 16px 80px}
+.no3d #b3-canvas,.no3d .b3-labels,.no3d .b3-hint,.no3d .b3-big,.no3d .b3-steps{display:none}
+.no3d .b3-fallback{display:block;max-width:320px;border-radius:18px;margin:28px auto}
+.no3d .b3-ui{position:static;display:grid;grid-template-columns:1fr;max-width:var(--wrap);margin:0 auto;padding:0;gap:24px}
+.no3d .b3-chs{position:static;width:auto;grid-column:1;grid-row:auto;display:grid;gap:18px}
+.no3d .b3-ch{position:static;opacity:1;visibility:visible;transform:none}
+.no3d .b3-cta{position:static;opacity:1;visibility:visible;transform:none;justify-self:start}
 </style>
 
 </head>
@@ -441,47 +502,52 @@ footer .logo{color:#fff}
     </div>
   </section>
 
-  <!-- 3. LA SOLUTION -->
-  <section class="switch" id="solution" data-t="20">
-   <div class="switch-pin">
-    <div class="switch-glow" aria-hidden="true"></div>
-    <div class="wrap switch-grid">
-      <div class="switch-copy" id="switch-copy">
-        <span class="time" style="color:#bfe3de">12:20</span>
-        <h2 style="margin-top:14px">Et si votre restaurant fonctionnait autrement ?</h2>
-        <p class="lead">Avec la borne O'javana, vos clients commandent et paient eux-mêmes, en quelques gestes. La commande part directement en cuisine. Votre comptoir n'est plus le goulot d'étranglement.</p>
-        <a class="btn btn-ghost" href="#demo" style="color:#fff">Voir la borne en démo</a>
-      </div>
-      <div class="switch-kiosk"><img id="switch-img" src="img/borne-seule.jpg" alt="Borne O'javana blanche sur pied, écran allumé"></div>
-    </div>
-   </div>
-  </section>
-  <div class="to-day" aria-hidden="true"></div>
-
-  <!-- 4. COMMENT ÇA MARCHE -->
-  <section class="day" id="comment" data-t="25">
-    <div class="wrap">
-      <div class="s-head rv">
-        <span class="time">12:25</span>
-        <h2>Cinq gestes. Zéro attente au comptoir.</h2>
-      </div>
-      <div class="how" id="how">
-       <div class="how-sticky">
-        <div class="how-pin">
-          <div class="progress" aria-hidden="true"><i id="prog"></i></div>
-          <div class="screen">
-            <img src="img/interface.jpg" alt="Borne O'javana montrant la grille de produits" loading="lazy"><span class="screen-logo" aria-hidden="true">o'javana</span>
-            <div class="screen-ui" id="ui" aria-live="polite"></div>
-          </div>
+  <!-- 3. LA BORNE EN 3D, PILOTÉE PAR LE SCROLL -->
+  <section class="b3" id="solution" data-t="20" aria-label="La borne O'javana en 3D, étape par étape">
+    <div class="b3-stage" id="b3-stage">
+      <canvas id="b3-canvas" aria-hidden="true"></canvas>
+      <img class="b3-fallback" src="img/borne-seule.jpg" alt="Borne O'javana blanche sur pied, écran allumé" loading="lazy">
+      <div class="b3-ui">
+        <div class="b3-head">
+          <span class="b3-kick">O'javana · Borne 23,8″ · Service de midi</span>
+          <h2 class="b3-title">De la file au ticket,<br>en cinq gestes.</h2>
         </div>
-        <div class="steps" id="steps">
-          <button class="step active" data-s="0" type="button"><span class="step-n">1</span><span><h3>Ils choisissent</h3><p>Vos produits en grand, en photo, classés comme sur votre carte.</p></span></button>
-          <button class="step" data-s="1" type="button"><span class="step-n">2</span><span><h3>Ils personnalisent</h3><p>Sans oignons, sauce à part, taille XL. Ils le disent eux-mêmes, il n'y a plus rien à interpréter.</p></span></button>
-          <button class="step" data-s="2" type="button"><span class="step-n">3</span><span><h3>La borne propose</h3><p>Une boisson, des frites, un dessert. À chaque commande, sans oublier, sans insister.</p></span></button>
-          <button class="step" data-s="3" type="button"><span class="step-n">4</span><span><h3>Ils paient</h3><p>TWINT, Apple Pay, Google Pay ou carte, directement sur la borne.</p></span></button>
-          <button class="step" data-s="4" type="button"><span class="step-n">5</span><span><h3>Votre cuisine reçoit</h3><p>La commande arrive en cuisine, exactement comme le client l'a voulue.</p></span></button>
+        <ol class="b3-steps" aria-label="Étapes">
+          <li data-k="1"><b>01</b>Ils choisissent</li>
+          <li data-k="2"><b>02</b>Ils personnalisent</li>
+          <li data-k="3"><b>03</b>La borne propose</li>
+          <li data-k="4"><b>04</b>Ils paient</li>
+          <li data-k="5"><b>05</b>Votre cuisine reçoit</li>
+        </ol>
+        <div class="b3-chs">
+          <div class="b3-ch" data-k="0"><p class="b3-lead">Et si votre restaurant fonctionnait autrement&nbsp;? Avec la borne O'javana, vos clients commandent et paient eux-mêmes, en quelques gestes. Votre comptoir n'est plus le goulot d'étranglement.</p>
+            <dl><dt>Modèle</dt><dd>Un seul, 23,8″, sur pied ou sur comptoir</dd><dt>Caisse</dt><dd>Fonctionne avec la caisse O'javana</dd></dl></div>
+          <div class="b3-ch" data-k="1"><p class="b3-lead">Vos produits en grand, en photo, classés comme sur votre carte.</p>
+            <dl><dt>Écran</dt><dd>Tactile 23,8″, anti-reflet</dd><dt>Langues</dt><dd>Plusieurs langues au choix</dd><dt>Carte</dt><dd>Vos produits et vos prix</dd></dl></div>
+          <div class="b3-ch" data-k="2"><p class="b3-lead">Sans oignons, sauce à part, taille XL. Ils le disent eux-mêmes, il n'y a plus rien à interpréter.</p>
+            <dl><dt>Options</dt><dd>Retirer, ajouter, changer la taille</dd><dt>Cuisine</dt><dd>La demande arrive telle quelle</dd></dl></div>
+          <div class="b3-ch" data-k="3"><p class="b3-lead">Une boisson, des frites, un dessert. À chaque commande, sans oublier, sans insister.</p>
+            <dl><dt>Suggestions</dt><dd>Boisson, accompagnement, dessert</dd><dt>Menus</dt><dd>Proposés automatiquement</dd></dl></div>
+          <div class="b3-ch" data-k="4"><p class="b3-lead">Ils paient sur le lecteur intégré sous l'écran ou sur le terminal noir à côté.</p>
+            <dl><dt>Mobile</dt><dd>TWINT, Apple Pay, Google Pay</dd><dt>Cartes</dt><dd>Visa, Mastercard et autres</dd></dl></div>
+          <div class="b3-ch" data-k="5"><p class="b3-lead">Le ticket sort avec le numéro de commande. En cuisine, la commande arrive exactement comme le client l'a voulue.</p>
+            <dl><dt>Ticket</dt><dd>Imprimé avec le numéro de commande</dd><dt>Envoi</dt><dd>Direct en cuisine, sans ressaisie</dd></dl></div>
+          <div class="b3-ch" data-k="6"><p class="b3-lead">Conçue pour tenir le rythme de vos midis : un écran, un module de paiement et d'impression, un pied stable.</p>
+            <dl><dt>Pose</dt><dd>Sur pied ou sur comptoir</dd><dt>Installation</dt><dd>48 heures à 5 jours</dd></dl></div>
+          <div class="b3-ch" data-k="7"><p class="b3-lead">Une borne, un seul système. Venez la tester avec votre propre carte.</p>
+            <dl><dt>Démo</dt><dd>30 minutes, gratuite et sans engagement</dd></dl></div>
         </div>
-       </div>
+        <div class="b3-specs"><dl class="b3-spec-list" id="b3-spec"></dl></div>
+        <div class="b3-big"><span id="b3-clock">12:20</span><small>Heure du service</small></div>
+        <a class="b3-cta btn btn-primary" href="#demo">Réserver ma démo gratuite</a>
+        <div class="b3-hint" aria-hidden="true">Faites défiler</div>
+      </div>
+      <div class="b3-labels" aria-hidden="true">
+        <span class="b3-label">Écran tactile 23,8″</span>
+        <span class="b3-label">Lecteur de paiement</span>
+        <span class="b3-label">Imprimante de tickets</span>
+        <span class="b3-label">Pied et socle</span>
+        <span class="b3-label">Terminal de paiement</span>
       </div>
     </div>
   </section>
@@ -500,36 +566,6 @@ footer .logo{color:#fff}
       </div>
       <div class="center-cta"><a class="btn btn-primary" href="#demo">Réserver ma démo gratuite</a></div>
     </div>
-  </section>
-
-  <!-- 6. PRODUIT -->
-  <section class="day" id="produit" data-t="40">
-    <div class="prod-scroll" id="prod-scroll"><div class="prod-sticky"><div class="wrap product">
-      <div class="hotspot-wrap rv">
-        <img src="img/produit-curtis.jpg" alt="Borne O'javana chez Curtis, avec terminal de paiement noir sur le côté" loading="lazy">
-        <button class="hs" style="left:50%;top:30%" data-k="0" aria-expanded="false" aria-label="Écran tactile">1</button>
-        <button class="hs" style="left:78%;top:52%" data-k="2" aria-expanded="false" aria-label="Paiement intégré">2</button>
-        <button class="hs" style="left:40%;top:63%" data-k="3" aria-expanded="false" aria-label="Imprimante de tickets">3</button>
-        <button class="hs" style="left:50%;top:86%" data-k="5" aria-expanded="false" aria-label="Sur pied ou sur comptoir">4</button>
-      </div>
-      <div>
-        <div class="s-head rv" style="margin-bottom:0">
-          <span class="time">12:40</span>
-          <h2>Conçue pour tenir le rythme de vos midis.</h2>
-        </div>
-        <div class="specs" id="specs">
-          <div class="spec" data-i="0" data-hs="0"><span class="spec-k">1</span><div><strong>Écran tactile 23,8"</strong><p>Grand, lumineux, anti-reflet, lisible même en plein jour.</p></div></div>
-          <div class="spec" data-i="1"><span class="spec-k dot" aria-hidden="true"></span><div><strong>Interface de commande</strong><p>La même logique que votre caisse O'javana, avec vos produits et vos prix.</p></div></div>
-          <div class="spec" data-i="2" data-hs="1"><span class="spec-k">2</span><div><strong>Paiement intégré</strong><p>TWINT, Apple Pay, Google Pay et toutes les cartes.</p></div></div>
-          <div class="spec" data-i="3" data-hs="2"><span class="spec-k">3</span><div><strong>Imprimante de tickets</strong><p>Le client repart avec son numéro de commande.</p></div></div>
-          <div class="spec" data-i="4"><span class="spec-k dot" aria-hidden="true"></span><div><strong>Envoi direct en cuisine</strong><p>Chaque commande arrive sans ressaisie.</p></div></div>
-          <div class="spec" data-i="5" data-hs="3"><span class="spec-k">4</span><div><strong>Sur pied ou sur comptoir</strong><p>On l'adapte à votre espace.</p></div></div>
-        </div>
-        <div class="pay-logos" aria-label="Moyens de paiement acceptés">
-          <span class="pay twint">TWINT</span><span class="pay">Apple Pay</span><span class="pay">Google Pay</span><span class="pay">Visa</span><span class="pay">Mastercard</span>
-        </div>
-      </div>
-    </div></div></div>
   </section>
 
   <!-- 7. RÉSULTATS -->
@@ -756,45 +792,7 @@ footer .logo{color:#fff}
     Dessert:'<svg viewBox="0 0 64 52" aria-hidden="true"><circle cx="32" cy="27" r="19" fill="#c98b4e"/><g fill="#4a2a17"><circle cx="24" cy="20" r="2.6"/><circle cx="36" cy="17" r="2.2"/><circle cx="41" cy="28" r="2.6"/><circle cx="27" cy="33" r="2.4"/><circle cx="34" cy="38" r="2"/><circle cx="21" cy="28" r="1.8"/></g></svg>',
     Sauce:'<svg viewBox="0 0 64 52" aria-hidden="true"><ellipse cx="32" cy="38" rx="20" ry="7" fill="#cfd8db"/><path d="M12 30h40v8c0 4-9 7-20 7s-20-3-20-7z" fill="#e9eef0"/><ellipse cx="32" cy="30" rx="20" ry="7" fill="#f4f6f7"/><ellipse cx="32" cy="30" rx="16" ry="5" fill="#d6362e"/><path d="M26 29q6-3 12 0" stroke="#f08c80" stroke-width="1.5" fill="none"/></svg>'
   };
-  // How it works: kiosk screen changes per step
-  var ui=document.getElementById('ui'), prog=document.getElementById('prog');
-  var screens=[
-    '<div class="ui-title">Burgers</div><div class="ui-sub">Touchez un produit</div><div class="ui-grid"><div class="ui-tile">'+(ICON['Classic']||'')+'<span>Classic</span></div><div class="ui-tile on">'+(ICON['Cheese']||'')+'<span>Cheese</span></div><div class="ui-tile">'+(ICON['Chicken']||'')+'<span>Chicken</span></div><div class="ui-tile">'+(ICON['Veggie']||'')+'<span>Veggie</span></div><div class="ui-tile">'+(ICON['Kebab']||'')+'<span>Kebab</span></div><div class="ui-tile">'+(ICON['Wrap']||'')+'<span>Wrap</span></div></div><div class="ui-foot"><span>Panier</span><span>CHF —</span></div>',
-    '<div class="ui-title">Cheese burger</div><div class="ui-sub">Personnalisez</div><div class="ui-list"><div class="ui-row"><s>Oignons</s><span class="ui-pill">Retiré</span></div><div class="ui-row"><span>Sauce à part</span><span class="ui-pill">Ajouté</span></div><div class="ui-row"><span>Taille XL</span><span>+</span></div></div><div class="ui-foot"><span>Sans oignons</span><span class="ui-btn">Valider</span></div>',
-    '<div class="ui-title">Vous aimerez aussi</div><div class="ui-sub">Suggestion pour votre commande</div><div class="ui-grid" style="grid-template-columns:1fr 1fr"><div class="ui-tile on">'+(ICON['Frites']||'')+'<span>Frites</span></div><div class="ui-tile on">'+(ICON['Boisson']||'')+'<span>Boisson</span></div><div class="ui-tile">'+(ICON['Dessert']||'')+'<span>Dessert</span></div><div class="ui-tile">'+(ICON['Sauce']||'')+'<span>Sauce</span></div></div><div class="ui-foot"><span>Menu complet</span><span class="ui-btn">Ajouter</span></div>',
-    '<div class="ui-title">Paiement</div><div class="ui-pay"><div class="ui-sub">Choisissez votre moyen de paiement</div><div class="chips"><span class="chip on">TWINT</span><span class="chip">Apple Pay</span><span class="chip">Google Pay</span><span class="chip">Carte</span></div><div class="ui-sub">Approchez votre téléphone du terminal</div></div><div class="ui-foot"><span>Payé</span><span>✓</span></div>',
-    '<div class="ui-title">En cuisine</div><div class="ui-kds"><span><b>#42</b> · borne 1</span><span>1× Cheese burger</span><span>&nbsp;&nbsp;– SANS OIGNONS</span><span>&nbsp;&nbsp;– sauce à part</span><span>1× Frites · 1× Boisson</span></div><div class="ui-foot"><span>Ticket n° 42</span><span>Envoyée</span></div>'
-  ];
-  var stepEls=[].slice.call(document.querySelectorAll('.step')), cur=-1;
-  function setStep(i){
-    if(i===cur) return; cur=i;
-    stepEls.forEach(function(s,k){s.classList.toggle('active',k===i);s.classList.toggle('past',k<i)});
-    ui.style.opacity=0;
-    setTimeout(function(){ui.innerHTML=screens[i];ui.style.opacity=1;}, reduce?0:180);
-    prog.style.width=((i+1)*20)+'%';
-  }
-  setStep(0);
-  var how=document.getElementById('how');
-  stepEls.forEach(function(s,k){ s.addEventListener('click',function(){
-    if(reduce){setStep(k);return;}
-    var span=how.offsetHeight-how.querySelector('.how-sticky').offsetHeight;
-    window.scrollTo({top:how.getBoundingClientRect().top+window.scrollY-64+span*(k+.5)/5,behavior:'smooth'});
-  }); });
-
-
-  // Product hotspots
-  var specs=[].slice.call(document.querySelectorAll('.spec'));
-  var hs=[].slice.call(document.querySelectorAll('.hs'));
-  hs.forEach(function(b){
-    b.addEventListener('click',function(){
-      var open=b.getAttribute('aria-expanded')==='true';
-      hs.forEach(function(x){x.setAttribute('aria-expanded','false')});
-      specs.forEach(function(s){s.classList.remove('on')});
-      if(!open){ b.setAttribute('aria-expanded','true'); var s=specs[+b.dataset.k]; s.classList.add('on'); }
-    });
-  });
-
-
+  window.OJ_ICON=ICON;
   // ===== Scroll engine: one rAF per frame drives every scroll effect =====
   var sbar=document.getElementById('scrollbar');
   var heroMedia=document.getElementById('hero-media'), heroCopy=document.getElementById('hero-copy');
@@ -803,19 +801,11 @@ footer .logo{color:#fff}
   q.innerHTML=q.innerHTML.replace(/<em>(.*?)<\/em>/,'\u0001$1\u0002').split(' ').map(function(w){
     return '<span class="qw">'+w.replace('\u0001','<em>').replace('\u0002','</em>')+'</span>';}).join(' ');
   var qws=[].slice.call(q.querySelectorAll('.qw'));
-  var swPin=document.querySelector('.switch-pin'), swCopy=document.getElementById('switch-copy'), swImg=document.getElementById('switch-img'), swGlow=document.querySelector('.switch-glow');
-  var prodScroll=document.getElementById('prod-scroll');
   var hsScroll=document.getElementById('hs-scroll'), reel=document.getElementById('reel');
   function clamp(x){return x<0?0:x>1?1:x}
   function ease(x){return 1-Math.pow(1-x,3)}
   function pinP(el,offset){ var r=el.getBoundingClientRect(), span=el.offsetHeight-(window.innerHeight-(offset||0)); return clamp((-(r.top-(offset||0)))/Math.max(1,span)); }
   function sizeReel(){ if(reduce) return; var extra=Math.max(0,reel.scrollWidth-window.innerWidth); hsScroll.style.height=(window.innerHeight+extra)+'px'; hsScroll.dataset.extra=extra; }
-  var prodK=-1;
-  function setProd(k){
-    if(k===prodK) return; prodK=k;
-    specs.forEach(function(s,i){s.classList.toggle('on',i===k)});
-    hs.forEach(function(b){b.setAttribute('aria-expanded', String(specs[k] && specs[k].dataset.hs!==undefined && +b.dataset.k===k))});
-  }
   var ticking=false;
   function frame(){
     ticking=false;
@@ -831,17 +821,6 @@ footer .logo{color:#fff}
     // question words
     var qr=q.getBoundingClientRect(); var qp=clamp((vh*0.9-qr.top)/(vh*0.55));
     var n=Math.round(qp*qws.length); qws.forEach(function(w,i){w.classList.toggle('on',i<n)});
-    // switch: kiosk rises
-    var sp=pinP(sol);
-    var e1=ease(clamp(sp/0.55)), e2=ease(clamp((sp-0.05)/0.4));
-    swImg.style.transform='translateY('+((1-e1)*45).toFixed(2)+'vh) scale('+(0.62+0.38*e1).toFixed(4)+') rotate('+((1-e1)*-5).toFixed(2)+'deg)';
-    swCopy.style.transform='translateY('+((1-e2)*60).toFixed(1)+'px)'; swCopy.style.opacity=e2.toFixed(3);
-    swGlow.style.setProperty('--g',e1.toFixed(3));
-    // how it works
-    var wp=pinP(how,64); setStep(Math.min(4,Math.floor(wp*5)));
-    prog.style.width=(Math.min(1,wp)*100).toFixed(1)+'%';
-    // product
-    if(window.innerWidth>900){ var pp=pinP(prodScroll,64); setProd(Math.min(5,Math.floor(pp*6))); }
     // client reel
     var extra=+hsScroll.dataset.extra||0; if(extra){ var rp=pinP(hsScroll); reel.style.transform='translateX('+(-rp*extra).toFixed(1)+'px)'; }
   }
@@ -851,11 +830,6 @@ footer .logo{color:#fff}
   window.addEventListener('load',function(){sizeReel();req();});
   [].forEach.call(reel.querySelectorAll('img'),function(im){im.loading='eager';im.addEventListener('load',function(){sizeReel();req();})});
   sizeReel(); req();
-  // mobile: specs light up as they cross the middle of the screen
-  if('IntersectionObserver' in window){
-    var spo=new IntersectionObserver(function(es){es.forEach(function(e){ if(e.isIntersecting && window.innerWidth<=900) setProd(+e.target.dataset.i); });},{rootMargin:'-45% 0px -45% 0px'});
-    specs.forEach(function(s){spo.observe(s)});
-  }
 
   // Film link (prototype)
   var modal=document.getElementById('film-modal'), fv=modal.querySelector('video');
@@ -903,5 +877,6 @@ footer .logo{color:#fff}
   });
 })();
 </script>
+<script type="module" src="js/borne3d.js"></script>
 </body>
 </html>
