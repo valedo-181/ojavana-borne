@@ -947,5 +947,18 @@ footer .logo{color:#fff}
   ids.forEach(function(i){el[i].addEventListener('input',up)});up();
 })();
 </script>
+<script>
+(function(){
+  var URL='https://calendar.app.google/1kMfaZzH8Siqfxij8';
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href^="https://calendar.app.google/"]');
+    if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;
+    var w=Math.min(560,screen.availWidth-40),h=Math.min(820,screen.availHeight-60);
+    var x=(screen.availLeft||0)+Math.round((screen.availWidth-w)/2),y=(screen.availTop||0)+Math.round((screen.availHeight-h)/2);
+    var win=window.open(a.href||URL,'ojavana-rdv','popup=yes,width='+w+',height='+h+',left='+x+',top='+y);
+    if(win){e.preventDefault();try{win.opener=null;win.focus()}catch(_){}}
+  });
+})();
+</script>
 </body>
 </html>
