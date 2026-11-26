@@ -1,6 +1,6 @@
 // O'javana kiosk, interactive 3D scene driven by scroll.
 // Geometry follows the real kiosk photos: portrait 23,8" screen tilted back, white module
-// with ticket printer (left) and payment reader (right), black side terminal, single column, square base.
+// with ticket printer (left) and loyalty-card reader (right), black payment terminal on the side, single column, square base.
 import * as T from './three-bundle.js';
 
 const sec = document.getElementById('solution');
@@ -49,7 +49,7 @@ function init() {
   key.shadow.radius = 6; key.shadow.bias = -0.0005;
   scene.add(key);
   const rim = new T.DirectionalLight(0x7fd1c8, 1.4); rim.position.set(-3, 2.2, -2.5); scene.add(rim);
-  const warm = new T.PointLight(0xf2a541, 0, 3, 2); warm.position.set(0.25, 0.95, 0.5); scene.add(warm);
+  const warm = new T.PointLight(0xf2a541, 0, 3, 2); warm.position.set(0.42, 1.2, 0.45); scene.add(warm);
 
   // Floor: soft glow disc + shadow catcher
   const glowTex = radialTex(['rgba(255,255,255,0.22)', 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0)']);
@@ -77,7 +77,7 @@ function init() {
   parts.column = new T.Group(); kiosk.add(parts.column);
   box(0.12, 0.86, 0.09, 0.012, white, parts.column).position.y = 0.016 + 0.43;
 
-  // Module: printer + payment reader
+  // Module: printer + loyalty-card reader
   parts.module = new T.Group(); parts.module.position.set(0, 0.97, 0.012); kiosk.add(parts.module);
   box(0.36, 0.19, 0.15, 0.016, white, parts.module);
   const printerPanel = box(0.13, 0.14, 0.006, 0.004, grey, parts.module); printerPanel.position.set(-0.088, -0.005, 0.075);
@@ -121,10 +121,10 @@ function init() {
   // Exploded-view anchors (for HTML labels)
   const anchors = [
     new T.Vector3(0.19, 1.45, 0.03),   // screen
-    new T.Vector3(0.14, 0.97, 0.08),   // payment reader
+    new T.Vector3(0.14, 0.97, 0.08),   // loyalty-card reader
     new T.Vector3(-0.15, 1.0, 0.08),   // printer
     new T.Vector3(0.0, 0.45, 0.06),    // column + base
-    new T.Vector3(0.31, 1.2, 0.03)     // side terminal
+    new T.Vector3(0.31, 1.2, 0.03)     // payment terminal
   ];
   const anchorParents = [parts.screen, parts.module, parts.module, parts.column, parts.side];
   const anchorLocal = anchors.map((a, i) => anchorParents[i].worldToLocal(a.clone()));
@@ -199,8 +199,8 @@ function init() {
         const x = 40 + (i % 2) * 290, y = 290 + Math.floor(i / 2) * 150;
         rr(x, y, 270, 124, 20, c[1] ? INK : TILE); txt(c[0], x + 135, y + 74, 32, c[1] ? '#fff' : INK, 800, 'center');
       });
-      txt('Approchez votre téléphone', 320, 700, 32, INK, 700, 'center');
-      txt('ou votre carte du lecteur', 320, 744, 32, INK, 700, 'center');
+      txt('Payez sur le terminal', 320, 700, 32, INK, 700, 'center');
+      txt('à droite de l’écran', 320, 744, 32, INK, 700, 'center');
       sctx.save(); sctx.translate(320, 850); sctx.strokeStyle = TEAL; sctx.lineWidth = 8; sctx.lineCap = 'round';
       for (let i = 1; i <= 3; i++) { sctx.beginPath(); sctx.arc(-40, 0, i * 26, -0.7, 0.7); sctx.stroke(); }
       sctx.restore();
@@ -231,7 +231,7 @@ function init() {
     { cam: [0.55, 1.36, 2.75], tgt: [0, 1.17, 0], ry: -0.15, ex: 0 },
     { cam: [0.15, 1.36, 2.6], tgt: [0, 1.19, 0], ry: 0.12, ex: 0 },
     { cam: [-0.4, 1.34, 2.7], tgt: [0, 1.17, 0], ry: 0.2, ex: 0 },
-    { cam: [1.1, 1.16, 2.25], tgt: [0.07, 1.06, 0], ry: 0.55, ex: 0 },
+    { cam: [1.2, 1.22, 2.2], tgt: [0.16, 1.12, 0], ry: 0.55, ex: 0 },
     { cam: [-0.75, 1.0, 1.85], tgt: [-0.05, 0.9, 0], ry: -0.35, ex: 0 },
     { cam: [2.1, 1.15, 3.3], tgt: [0, 0.92, 0], ry: 0.6, ex: 1 },
     { cam: [0.0, 1.0, 3.6], tgt: [0, 0.86, 0], ry: 0, ex: 0 }
@@ -301,7 +301,7 @@ function init() {
     const ch = Math.round(f);
     drawScreen(CH_SCREEN[ch]);
     const payOn = Math.max(0, 1 - Math.abs(f - 4) * 1.6);
-    ledMat.color.setRGB(1, 0.23 + 0.2 * Math.sin(t * 6) * payOn, 0.18);
+    
     warm.intensity = payOn * 1.4;
     tsMat.color.set(payOn > 0.3 ? 0x2f8582 : 0x1d2a2b);
     const tk = Math.min(1, Math.max(0, (f - 4.55) / 0.4));
