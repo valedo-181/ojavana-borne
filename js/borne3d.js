@@ -195,7 +195,7 @@ function init() {
     },
     function pay() {
       header('Paiement', 'Choisissez votre moyen de paiement');
-      [['TWINT', 1], ['Apple Pay', 0], ['Google Pay', 0], ['Carte', 0]].forEach((c, i) => {
+      [['TWINT', 1], ['Visa', 0], ['Mastercard', 0], ['PostFinance', 0]].forEach((c, i) => {
         const x = 40 + (i % 2) * 290, y = 290 + Math.floor(i / 2) * 150;
         rr(x, y, 270, 124, 20, c[1] ? INK : TILE); txt(c[0], x + 135, y + 74, 32, c[1] ? '#fff' : INK, 800, 'center');
       });

@@ -187,7 +187,7 @@ section{padding-block:clamp(72px,11vw,140px)}
 .real-note::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal)}
 
 /* Why */
-.why{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.why{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .why-item{display:grid;gap:10px;align-content:start;padding-top:22px;border-top:2px solid var(--ink)}
 .why-item p{color:var(--mute)}
 .chain{margin-top:40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:28px 32px;border-radius:14px;background:var(--ink);color:#fff}
@@ -470,6 +470,12 @@ footer .logo{color:#fff}
 .calc-btn{background:#c7ee5f;color:var(--ink);justify-content:center;margin-top:6px}
 .calc-note{font-size:.78rem;color:#9fb3b1;margin:0}
 @media (max-width:900px){.calc{grid-template-columns:1fr}.calc-out{position:static}}
+.pay-logos{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.pay-logos img{width:72px;height:auto;border-radius:8px;border:1px solid var(--line-day);background:#fff}
+.offer-pay{display:grid;gap:2px}
+.offer-pay>span{font:700 .72rem/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#9fb3b1}
+.offer-pay .pay-logos{margin-top:8px}
+.offer-pay .pay-logos img{width:60px;border:0}
 .offer{display:grid;grid-template-columns:1.1fr .9fr;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,var(--ink) 0%,#173b3a 100%);color:#fff;box-shadow:0 30px 60px -30px rgba(15,26,26,.55)}
 .offer-copy{padding:clamp(28px,5vw,56px);display:grid;gap:18px;align-content:center}
 .offer-k{color:#7fd3c8;font:700 .8rem/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;font-size:.9rem}
@@ -581,7 +587,7 @@ footer .logo{color:#fff}
           <div class="b3-ch" data-k="3"><p class="b3-lead">Une boisson, des frites, un dessert. À chaque commande, sans oublier, sans insister.</p>
             <dl><dt>Suggestions</dt><dd>Boisson, accompagnement, dessert</dd><dt>Menus</dt><dd>Proposés automatiquement</dd></dl></div>
           <div class="b3-ch" data-k="4"><p class="b3-lead">Ils paient sur le terminal de paiement noir, fixé à côté de l'écran.</p>
-            <dl><dt>Mobile</dt><dd>TWINT, Apple Pay, Google Pay</dd><dt>Cartes</dt><dd>Visa, Mastercard et autres</dd></dl></div>
+            <dl><dt>Mobile</dt><dd>TWINT</dd><dt>Cartes</dt><dd>Visa, Mastercard, PostFinance</dd></dl></div>
           <div class="b3-ch" data-k="5"><p class="b3-lead">Le ticket sort avec le numéro de commande. En cuisine, la commande arrive exactement comme le client l'a voulue.</p>
             <dl><dt>Ticket</dt><dd>Imprimé avec le numéro de commande</dd><dt>Envoi</dt><dd>Direct en cuisine, sans ressaisie</dd></dl></div>
           <div class="b3-ch" data-k="6"><p class="b3-lead">Conçue pour tenir le rythme de vos midis : un écran, un lecteur de carte de fidélité, une imprimante de tickets, un terminal de paiement et un pied stable.</p>
@@ -631,6 +637,7 @@ footer .logo{color:#fff}
           <div class="offer-price"><b>CHF 1’999.–</b><span>au lieu de <s>CHF 4’400.–</s></span><em>Vous économisez CHF 2’401.–</em></div>
           <div class="offer-left"><i aria-hidden="true"></i>Réservé aux 50 premières commandes</div>
           <a class="btn btn-primary" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Réserver mon appel gratuit</a>
+          <div class="offer-pay"><span>Paiements acceptés</span><div class="pay-logos"><img src="img/pay-twint.png" alt="TWINT" width="96" height="64" loading="lazy"><img src="img/pay-visa.png" alt="Visa" width="96" height="64" loading="lazy"><img src="img/pay-mastercard.png" alt="Mastercard" width="96" height="64" loading="lazy"><img src="img/pay-postfinance.png" alt="PostFinance" width="96" height="64" loading="lazy"></div></div>
           <p class="offer-small">Offre valable pour les 50 premières commandes. On vous explique tout pendant l'appel.</p>
         </div>
         <div class="offer-media"><span class="offer-badge" aria-hidden="true"><b>−55 %</b><small>50 premières<br>commandes</small></span><img src="img/produit-curtis.jpg" alt="Borne O'javana installée chez Curtis à Courtelary" loading="lazy"></div>
@@ -696,7 +703,6 @@ footer .logo{color:#fff}
         <div class="why-item rv"><h3>Basés à Neuchâtel</h3><p>Notre équipe est à Boudry. Quand vous nous contactez, une vraie personne vous répond en français, en allemand, en anglais ou en italien.</p></div>
         <div class="why-item rv"><h3>Un seul système</h3><p>La borne fait partie de la caisse O'javana. Un seul interlocuteur, une seule carte à gérer, aucune double saisie.</p></div>
         <div class="why-item rv"><h3>Installée en 48 h à 5 jours</h3><p>On programme votre carte et on installe la borne chez vous.</p></div>
-        <div class="why-item rv"><h3>La borne peut être offerte</h3><p>Avec l'abonnement Freedom, la borne est offerte aux établissements éligibles.</p></div>
       </div>
       <div class="chain rv">
         <div><h3 style="color:#fff">Plusieurs établissements ?</h3><p style="margin-top:8px">Menus centralisés, tableau de bord multi-sites et un interlocuteur dédié. Parlons de votre réseau.</p></div>
@@ -744,7 +750,7 @@ footer .logo{color:#fff}
         <details open><summary>Est-ce compliqué à utiliser ?</summary><p>Non. Vos clients choisissent avec de grandes images et quelques touches, comme sur un smartphone. Et pour votre équipe, l'interface suit la même logique que la caisse O'javana.</p></details>
         <details><summary>Est-ce adapté à mon restaurant ?</summary><p>La borne est pensée pour les fast-foods, snacks, kebabs, burgers, pizzerias et cafés qui ont des heures de pointe. Elle existe sur pied ou sur comptoir. La démo sert justement à vérifier qu'elle convient à votre espace et à votre carte.</p></details>
         <details><summary>Comment les commandes arrivent-elles en cuisine ?</summary><p>Directement, dès que le client a payé. Elles s'affichent sur un écran de cuisine (en option) ou sortent sur l'imprimante de la cuisine, sans ressaisie.</p></details>
-        <details><summary>Quels moyens de paiement sont acceptés ?</summary><p>TWINT, Apple Pay, Google Pay et les cartes de paiement, sur le terminal de paiement fixé à la borne.</p></details>
+        <details><summary>Quels moyens de paiement sont acceptés ?</summary><p>TWINT, Visa, Mastercard et PostFinance, sur le terminal de paiement fixé à la borne.</p><div class="pay-logos"><img src="img/pay-twint.png" alt="TWINT" width="96" height="64" loading="lazy"><img src="img/pay-visa.png" alt="Visa" width="96" height="64" loading="lazy"><img src="img/pay-mastercard.png" alt="Mastercard" width="96" height="64" loading="lazy"><img src="img/pay-postfinance.png" alt="PostFinance" width="96" height="64" loading="lazy"></div></details>
         <details><summary>Combien coûte la borne ?</summary><p><b>Offre de lancement :</b> caisse + borne + terminal à CHF 1'999.– au lieu de CHF 4'400.–, pour les 50 premières commandes. La programmation de votre carte et l'installation sur place coûtent CHF 380, une seule fois.</p></details>
         <details><summary>Est-elle compatible avec mon système de caisse ?</summary><p>La borne fonctionne avec la caisse O'javana. C'est ce qui permet un seul système, une seule carte et zéro double saisie. Si vous avez une autre caisse, on vous montre en démo comment passer à O'javana.</p></details>
         <details><summary>Combien de temps faut-il pour l'installation ?</summary><p>Entre 48 heures et 5 jours. On programme votre carte, on installe la borne et on forme votre équipe.</p></details>
