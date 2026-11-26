@@ -228,6 +228,12 @@ form .btn{justify-content:center;width:100%;font-size:1.05rem}
 .slot[aria-pressed="true"]{background:var(--teal);color:#fff}
 .cal small{color:var(--mute)}
 
+.book{background:#fff;border:1px solid var(--line-day);border-radius:18px;padding:clamp(24px,3.5vw,44px);display:grid;gap:20px;box-shadow:0 30px 70px -45px rgba(15,26,26,.45)}
+.book .big{font:800 clamp(1.9rem,3vw,2.5rem)/1.05 var(--f-display);font-stretch:85%}
+.book-steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.book-steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;color:var(--mute)}
+.book-steps b{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e3f0ee;color:var(--teal);font:700 .85rem/1 var(--f-mono)}
+.book-btn{justify-content:center;font-size:1.08rem;padding:1.2em 1.5em}
 /* FAQ */
 .faq{max-width:860px;margin-inline:auto}
 details{border-bottom:1px solid var(--line-day)}
@@ -600,7 +606,7 @@ footer .logo{color:#fff}
         <h2>Une équipe suisse, à côté de chez vous.</h2>
       </div>
       <div class="why">
-        <div class="why-item rv"><h3>Basés à Neuchâtel</h3><p>Notre équipe est à Boudry. Quand vous appelez, quelqu'un décroche et répond en français, en allemand, en anglais ou en italien.</p></div>
+        <div class="why-item rv"><h3>Basés à Neuchâtel</h3><p>Notre équipe est à Boudry. Quand vous nous contactez, une vraie personne vous répond en français, en allemand, en anglais ou en italien.</p></div>
         <div class="why-item rv"><h3>Un seul système</h3><p>La borne fait partie de la caisse O'javana. Un seul interlocuteur, une seule carte à gérer, aucune double saisie.</p></div>
         <div class="why-item rv"><h3>Installée en 48 h à 5 jours</h3><p>On programme votre carte et on installe la borne chez vous.</p></div>
         <div class="why-item rv"><h3>La borne peut être offerte</h3><p>Avec l'abonnement Freedom, la borne est offerte aux établissements éligibles.</p></div>
@@ -624,51 +630,21 @@ footer .logo{color:#fff}
           <li>Vous recevez un devis matériel adapté à votre restaurant.</li>
           <li>Gratuit et sans engagement.</li>
         </ul>
-        <div class="call">Vous préférez appeler ? <strong>Numéro à confirmer</strong> · support@ojavana.com</div>
+        <div class="call">Une question avant la démo ? Écrivez-nous à <a href="mailto:support@ojavana.com"><strong>support@ojavana.com</strong></a></div>
       </div>
 
       <div>
-        <form id="form" novalidate>
-          <div class="row2">
-            <div class="field"><label for="f-nom">Nom et prénom</label><input id="f-nom" name="nom" autocomplete="name" required><span class="msg" aria-live="polite"></span></div>
-            <div class="field"><label for="f-resto">Nom du restaurant</label><input id="f-resto" name="resto" autocomplete="organization" required><span class="msg" aria-live="polite"></span></div>
-          </div>
-          <div class="row2">
-            <div class="field"><label for="f-mail">E-mail</label><input id="f-mail" name="mail" type="email" inputmode="email" autocomplete="email" required><span class="msg" aria-live="polite"></span></div>
-            <div class="field"><label for="f-tel">Téléphone</label><input id="f-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" required><span class="msg" aria-live="polite"></span></div>
-          </div>
-          <div class="field">
-            <label for="f-type">Type d'établissement</label>
-            <select id="f-type" name="type" required>
-              <option value="">Choisir…</option><option>Fast-food</option><option>Snack / kebab</option><option>Burger</option><option>Pizzeria</option><option>Café</option><option>Autre</option>
-            </select><span class="msg" aria-live="polite"></span>
-          </div>
-          <fieldset class="field" style="border:0;padding:0;margin:0">
-            <legend style="font-weight:600;font-size:.92rem;margin-bottom:7px">Nombre d'établissements</legend>
-            <div class="seg">
-              <input type="radio" name="sites" id="s1" value="1" checked><label for="s1">1</label>
-              <input type="radio" name="sites" id="s2" value="2-5"><label for="s2">2 à 5</label>
-              <input type="radio" name="sites" id="s3" value="5+"><label for="s3">Plus de 5</label>
-            </div>
-          </fieldset>
-          <button class="btn btn-primary" type="submit">Je réserve ma démonstration gratuite</button>
+        <div class="book">
+          <span class="time">Votre démo</span>
+          <p class="big">Choisissez votre créneau.</p>
+          <ol class="book-steps">
+            <li><b>1</b>Ouvrez notre agenda et choisissez l'heure qui vous convient.</li>
+            <li><b>2</b>Indiquez votre nom, votre e-mail et votre restaurant.</li>
+            <li><b>3</b>Vous recevez la confirmation et l'invitation par e-mail.</li>
+          </ol>
+          <a class="btn btn-primary book-btn" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Je choisis mon créneau</a>
           <div class="reassure"><span>✓ Gratuit</span><span>✓ Sans engagement</span><span>✓ 30 minutes</span></div>
-          <p class="next">Étape suivante : choisissez votre créneau dans notre agenda.</p>
-          <p class="privacy">Vos données servent uniquement à organiser votre démonstration. Voir notre politique de confidentialité.</p>
-        </form>
-
-        <div class="done" id="done" hidden>
-          <span class="time">13:00</span>
-          <p class="big">Merci, c'est noté.</p>
-          <p style="color:var(--mute)">Choisissez maintenant l'heure qui vous convient.</p>
-          <div class="cal">
-            <strong>Vos créneaux disponibles</strong>
-            <div class="slots" id="slots">
-              <button type="button" class="slot" aria-pressed="false">Lun 09:30</button><button type="button" class="slot" aria-pressed="false">Lun 15:00</button><button type="button" class="slot" aria-pressed="false">Mar 10:00</button><button type="button" class="slot" aria-pressed="false">Mer 14:30</button><button type="button" class="slot" aria-pressed="false">Jeu 16:00</button>
-            </div>
-            <small>Prototype : créneaux d'exemple. Ici s'affichera la page de réservation Google Agenda d'O'javana.</small>
-          </div>
-          <p style="font-size:.9rem;color:var(--mute)">Vous ne trouvez pas de créneau ? On vous rappelle dans la journée.</p>
+          <p class="privacy">La réservation s'ouvre dans Google Agenda. Vos données servent uniquement à organiser votre démonstration.</p>
         </div>
       </div>
     </div>
@@ -841,40 +817,6 @@ footer .logo{color:#fff}
   modal.addEventListener('click',function(e){if(e.target===modal)closeFilm();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeFilm();});
 
-  // Form validation + two-step booking
-  var form=document.getElementById('form'), done=document.getElementById('done');
-  var rules={
-    'f-nom':function(v){return v.trim().length>=2||'Indiquez votre nom et prénom.'},
-    'f-resto':function(v){return v.trim().length>=2||'Indiquez le nom de votre restaurant.'},
-    'f-mail':function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())||'Vérifiez votre e-mail, par exemple nom@restaurant.ch.'},
-    'f-tel':function(v){return v.replace(/[^\d]/g,'').length>=9||'Indiquez un numéro de téléphone complet.'},
-    'f-type':function(v){return !!v||'Choisissez votre type d\'établissement.'}
-  };
-  function check(id,show){
-    var el=document.getElementById(id), f=el.closest('.field'), r=rules[id](el.value);
-    if(r===true){f.classList.add('ok');f.classList.remove('bad');f.querySelector('.msg').textContent='';return true;}
-    if(show){f.classList.add('bad');f.classList.remove('ok');f.querySelector('.msg').textContent=r;}
-    return false;
-  }
-  Object.keys(rules).forEach(function(id){
-    var el=document.getElementById(id);
-    el.addEventListener('blur',function(){ if(el.value) check(id,true); });
-    el.addEventListener('input',function(){ if(el.closest('.field').classList.contains('bad')) check(id,true); else check(id,false); });
-    el.addEventListener('change',function(){ check(id,true); });
-  });
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var ok=true, first=null;
-    Object.keys(rules).forEach(function(id){ if(!check(id,true)){ ok=false; if(!first) first=id; } });
-    if(!ok){ document.getElementById(first).focus(); return; }
-    form.hidden=true; done.hidden=false; done.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
-  });
-  document.getElementById('slots').addEventListener('click',function(e){
-    var b=e.target.closest('.slot'); if(!b) return;
-    [].forEach.call(this.querySelectorAll('.slot'),function(x){x.setAttribute('aria-pressed','false')});
-    b.setAttribute('aria-pressed','true');
-    this.nextElementSibling.textContent='Créneau d\'exemple sélectionné : '+b.textContent+'. Dans la version finale, le rendez-vous s\'inscrit dans Google Agenda et une invitation part par e-mail.';
-  });
 })();
 </script>
 <script type="module" src="js/borne3d.js"></script>
