@@ -504,7 +504,6 @@ footer .logo{color:#fff}
           <div class="pain-body"><h3>Le supplément oublié</h3><p>En plein rush, personne n'a le temps de proposer la boisson, le menu ou le dessert.</p></div>
         </article>
       </div>
-      <p class="question" id="question">Combien de clients sont repartis de chez vous <em>ce midi</em> ?</p>
     </div>
   </section>
 
@@ -772,10 +771,7 @@ footer .logo{color:#fff}
   var sbar=document.getElementById('scrollbar');
   var heroMedia=document.getElementById('hero-media'), heroCopy=document.getElementById('hero-copy');
   var painImgs=[].slice.call(document.querySelectorAll('.pain-vid img'));
-  var q=document.getElementById('question');
-  q.innerHTML=q.innerHTML.replace(/<em>(.*?)<\/em>/,'\u0001$1\u0002').split(' ').map(function(w){
-    return '<span class="qw">'+w.replace('\u0001','<em>').replace('\u0002','</em>')+'</span>';}).join(' ');
-  var qws=[].slice.call(q.querySelectorAll('.qw'));
+
   var hsScroll=document.getElementById('hs-scroll'), reel=document.getElementById('reel');
   function clamp(x){return x<0?0:x>1?1:x}
   function ease(x){return 1-Math.pow(1-x,3)}
@@ -793,9 +789,6 @@ footer .logo{color:#fff}
     heroCopy.style.transform='translateY('+(-hp*120).toFixed(1)+'px)'; heroCopy.style.opacity=(1-hp*1.4).toFixed(3);
     // pain images drift
     painImgs.forEach(function(im){ var r=im.parentNode.getBoundingClientRect(); if(r.bottom<0||r.top>vh) return; var t=(r.top+r.height/2-vh/2)/vh; im.style.setProperty('--py',(t*-50).toFixed(1)); });
-    // question words
-    var qr=q.getBoundingClientRect(); var qp=clamp((vh*0.9-qr.top)/(vh*0.55));
-    var n=Math.round(qp*qws.length); qws.forEach(function(w,i){w.classList.toggle('on',i<n)});
     // client reel
     var extra=+hsScroll.dataset.extra||0; if(extra){ var rp=pinP(hsScroll); reel.style.transform='translateX('+(-rp*extra).toFixed(1)+'px)'; }
   }
