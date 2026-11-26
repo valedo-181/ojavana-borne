@@ -454,6 +454,22 @@ footer .logo{color:#fff}
 .benefit{border-top:3px solid var(--teal);transition:transform .25s,box-shadow .25s}
 .benefit:hover{transform:translateY(-4px);box-shadow:0 18px 40px -22px rgba(15,26,26,.35)}
 @media (max-width:700px){.trust-in{gap:14px;flex-direction:column;align-items:flex-start}.trust ul{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:14px 24px}.trust li b{font-size:1rem}}
+.calc{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}
+.calc-in{display:grid;gap:14px;background:#fff;border:1px solid var(--line-day);border-radius:18px;padding:clamp(20px,3vw,32px)}
+.calc-f{display:grid;grid-template-columns:1fr auto;gap:8px 16px;align-items:end}
+.calc-l{font-weight:600;font-size:.95rem;color:var(--ink)}
+.calc-v{font:700 1rem/1 var(--f-mono);color:var(--teal);white-space:nowrap}
+.calc-f input{grid-column:1/-1;width:100%;accent-color:var(--teal);height:28px}
+.calc-out{position:sticky;top:90px;background:linear-gradient(150deg,var(--ink),#173b3a);color:#fff;border-radius:18px;padding:clamp(24px,3vw,36px);display:grid;gap:10px}
+.calc-k{font:700 .78rem/1.3 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#7fd3c8}
+.calc-out>b{font:800 clamp(2.6rem,5vw,3.6rem)/1 var(--f-display);font-stretch:85%;color:#c7ee5f;font-variant-numeric:tabular-nums}
+.calc-per{color:#c8d6d4;margin-top:-4px}
+.calc-row{display:flex;justify-content:space-between;gap:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);font-size:.95rem;color:#c8d6d4}
+.calc-row strong{color:#fff;font-variant-numeric:tabular-nums}
+.calc-pay{margin:6px 0 0;padding:12px 14px;border-radius:10px;background:rgba(199,238,95,.12);color:#e9f8c4;font-size:.95rem}
+.calc-btn{background:#c7ee5f;color:var(--ink);justify-content:center;margin-top:6px}
+.calc-note{font-size:.78rem;color:#9fb3b1;margin:0}
+@media (max-width:900px){.calc{grid-template-columns:1fr}.calc-out{position:static}}
 .offer{display:grid;grid-template-columns:1.1fr .9fr;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,var(--ink) 0%,#173b3a 100%);color:#fff;box-shadow:0 30px 60px -30px rgba(15,26,26,.55)}
 .offer-copy{padding:clamp(28px,5vw,56px);display:grid;gap:18px;align-content:center}
 .offer-k{color:#7fd3c8;font:700 .8rem/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;font-size:.9rem}
@@ -601,6 +617,30 @@ footer .logo{color:#fff}
         <article class="benefit rv"><span class="b-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M10 18h4M9 7h6M9 10.5h4"/></svg></span><span class="who">Pour vos clients</span><h3>Commander à leur rythme</h3><p>Ils commandent à leur rythme, dans leur langue, sans faire la queue pour passer commande.</p></article>
       </div>
       <div class="center-cta"><a class="btn btn-primary" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Réserver mon appel gratuit</a></div>
+    </div>
+  </section>
+
+  <!-- CALCUL -->
+  <section class="day" id="calcul">
+    <div class="wrap">
+      <div class="s-head rv">
+        <span class="time">12:35</span>
+        <h2>Combien la borne peut vous rapporter ?</h2>
+        <p class="lead">Faites le calcul avec les chiffres de votre restaurant. Déplacez les curseurs.</p>
+      </div>
+      <div class="calc rv">
+        <div class="calc-in"><label class="calc-f"><span class="calc-l">Commandes par jour</span><span class="calc-v"><output id="c-cmd-o">80</output> </span><input type="range" id="c-cmd" min="10" max="400" step="5" value="80"></label><label class="calc-f"><span class="calc-l">Ticket moyen</span><span class="calc-v"><output id="c-tk-o">18</output> CHF</span><input type="range" id="c-tk" min="8" max="60" step="1" value="18"></label><label class="calc-f"><span class="calc-l">Jours d'ouverture par mois</span><span class="calc-v"><output id="c-jr-o">26</output> jours</span><input type="range" id="c-jr" min="10" max="31" step="1" value="26"></label><label class="calc-f"><span class="calc-l">Commandes en plus par jour, grâce à moins de clients qui repartent</span><span class="calc-v"><output id="c-plus-o">5</output> </span><input type="range" id="c-plus" min="0" max="60" step="1" value="5"></label><label class="calc-f"><span class="calc-l">Clients qui acceptent un supplément proposé par la borne</span><span class="calc-v"><output id="c-pct-o">10</output> %</span><input type="range" id="c-pct" min="0" max="50" step="1" value="10"></label><label class="calc-f"><span class="calc-l">Prix moyen du supplément</span><span class="calc-v"><output id="c-sup-o">4</output> CHF</span><input type="range" id="c-sup" min="1" max="15" step="0.5" value="4"></label></div>
+        <div class="calc-out" aria-live="polite">
+          <span class="calc-k">Chiffre d'affaires supplémentaire</span>
+          <b id="c-mois">CHF 0.–</b><span class="calc-per">par mois</span>
+          <div class="calc-row"><span>Par an</span><strong id="c-an">CHF 0.–</strong></div>
+          <div class="calc-row"><span>Commandes en plus</span><strong id="c-a">CHF 0.–</strong></div>
+          <div class="calc-row"><span>Suppléments vendus</span><strong id="c-b">CHF 0.–</strong></div>
+          <p class="calc-pay" id="c-pay"></p>
+          <a class="btn calc-btn" href="https://calendar.app.google/1kMfaZzH8Siqfxij8" target="_blank" rel="noopener">Vérifier ce calcul avec nous</a>
+          <p class="calc-note">Simulation basée uniquement sur les chiffres que vous entrez. Les valeurs de départ sont des exemples, pas des résultats mesurés. Ce n'est pas une garantie.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -860,5 +900,27 @@ footer .logo{color:#fff}
 })();
 </script>
 <script type="module" src="js/borne3d.js"></script>
+<script>
+(function(){
+  var ids=['c-cmd','c-tk','c-jr','c-plus','c-pct','c-sup'],el={};
+  ids.forEach(function(i){el[i]=document.getElementById(i)});
+  if(!el['c-cmd'])return;
+  function chf(n){return 'CHF '+Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"’")+'.–'}
+  function v(i){return parseFloat(el[i].value)}
+  function up(){
+    ids.forEach(function(i){document.getElementById(i+'-o').textContent=el[i].value});
+    var a=v('c-plus')*v('c-tk')*v('c-jr');
+    var b=v('c-cmd')*(v('c-pct')/100)*v('c-sup')*v('c-jr');
+    var m=a+b;
+    document.getElementById('c-mois').textContent=chf(m);
+    document.getElementById('c-an').textContent=chf(m*12);
+    document.getElementById('c-a').textContent=chf(a);
+    document.getElementById('c-b').textContent=chf(b);
+    var pay=document.getElementById('c-pay');
+    if(m>0){var mo=1999/m;pay.textContent='L’offre à CHF 1’999.– représente '+(mo<1?'moins d’un mois':'environ '+(Math.round(mo*10)/10).toString().replace('.',',')+' mois')+' de ce chiffre d’affaires supplémentaire.';pay.style.display=''}else pay.style.display='none';
+  }
+  ids.forEach(function(i){el[i].addEventListener('input',up)});up();
+})();
+</script>
 </body>
 </html>
